@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
-from xmlrpc.client import Boolean
-from sqlalchemy import Column, Integer, String, DateTime
-from backend.database import Base  # 👈 importante este import
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from backend.database import Base  # 👈 correcto
 
 class Vehiculo(Base):
     __tablename__ = "vehiculos"

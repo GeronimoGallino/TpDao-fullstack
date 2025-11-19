@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from backend.database import Base  # 👈 importante este import
 
 
@@ -13,3 +13,4 @@ class Cliente(Base):
     email = Column(String)
     direccion = Column(String)
     fecha_registro = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    estado = Column(Boolean, default=True)
