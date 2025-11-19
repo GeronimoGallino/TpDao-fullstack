@@ -66,4 +66,5 @@ def eliminar_cliente(cliente_id: int, db: Session = Depends(database.get_db)):
     cliente.estado = False
 
     db.commit()
+
     return {"mensaje": "Cliente eliminado (borrado lógico)"}

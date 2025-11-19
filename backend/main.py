@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from backend.database import Base, engine
-from backend.models import cliente, empleado  # importa solo los modelos, NO toda la carpeta models
+from backend import models
+from backend.database import engine, Base
+from backend.routers import cliente
 
 from backend.routers import cliente as cliente_router
 from backend.routers import empleado as empleado_router
@@ -11,9 +12,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Incluir routers
-app.include_router(cliente_router.router)
-app.include_router(empleado_router.router)
-
+app.include_router(cliente.router)
 
 @app.get("/")
 def root():
