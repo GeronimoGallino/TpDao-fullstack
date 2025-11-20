@@ -14,5 +14,4 @@ class Empleado(Base):
     email = Column(String)
     fecha_inicio = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     id_negocio = Column(Integer, nullable=False)
-
     estado = Column(Boolean, default=True)  # 👈 borrado lógico

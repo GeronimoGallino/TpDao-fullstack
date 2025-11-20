@@ -8,7 +8,7 @@ router = APIRouter(prefix="/empleados", tags=["Empleados"])
 
 @router.post("/", response_model=schemas.Empleado)
 def crear_empleado(empleado: schemas.EmpleadoCreate, db: Session = Depends(database.get_db)):
-    nuevo_empleado = models.Empleado(**empleado.dict())
+    nuevo_empleado = models.Empleado(**empleado.model_dump())
     db.add(nuevo_empleado)
     db.commit()
     db.refresh(nuevo_empleado)
@@ -23,8 +23,7 @@ def listar_empleados(db: Session = Depends(database.get_db)):
 @router.get("/{empleado_id}", response_model=schemas.Empleado)
 def obtener_empleado(empleado_id: int, db: Session = Depends(database.get_db)):
     empleado = db.query(models.Empleado).filter(
-        models.Empleado.id == empleado_id,
-        models.Empleado.estado == True
+        models.Empleado.id == empleado_id
     ).first()
 
     if not empleado:
@@ -43,7 +42,7 @@ def actualizar_empleado(empleado_id: int, datos: schemas.EmpleadoCreate, db: Ses
     if not empleado:
         raise HTTPException(status_code=404, detail="Empleado no encontrado o eliminado")
 
-    for key, value in datos.dict().items():
+    for key, value in datos.model_dump().items():
         setattr(empleado, key, value)
 
     db.commit()

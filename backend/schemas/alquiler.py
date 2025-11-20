@@ -1,25 +1,52 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from datetime import datetime
+from typing import Optional
 
+
+# ------------------------------
+#  Base: Campos compartidos
+# ------------------------------
 class AlquilerBase(BaseModel):
     id_cliente: int
     id_vehiculo: int
     id_empleado: int
-    fecha_inicio: datetime | None = None
-    fecha_fin: datetime | None = None
-    costo_total: int | None = None
-    kilometraje_inicial: int | None = None
-    kilometraje_final: int | None = None
-    estado: str | None = "activo"
+    fecha_inicio: Optional[datetime] = None
+    fecha_fin: Optional[datetime] = None
+    costo_total: Optional[int] = None
+    kilometraje_inicial: Optional[int] = None
+    kilometraje_final: Optional[int] = None
+    estado: Optional[str] = "activo"
 
-class AlquilerCreate(AlquilerBase):
-    """Esquema usado para crear un nuevo alquiler."""
-    pass
+    @validator("fecha_fin")
+    def validar_fechas(cls, v, values):
+        if v and "fecha_inicio" in values and values["fecha_inicio"]:
+            if v < values["fecha_inicio"]:
+                raise ValueError("fecha_fin debe ser posterior a fecha_inicio")
+        return v
 
+
+# ------------------------------
+#  Crear alquiler
+# ------------------------------
+class AlquilerCreate(BaseModel):
+    id_cliente: int
+    id_vehiculo: int
+    id_empleado: int
+    kilometraje_inicial: int
+
+
+# ------------------------------
+#  Finalizar alquiler (solo lo necesario)
+# ------------------------------
+class AlquilerFinalizar(BaseModel):
+    kilometraje_final: int
+
+
+# ------------------------------
+#  Respuesta
+# ------------------------------
 class Alquiler(AlquilerBase):
-    """Esquema de respuesta (incluye campos autogenerados)."""
     id: int
 
-    model_config = {
-        "from_attributes": True  # ✅ reemplaza orm_mode en Pydantic v2
-    }
+    class Config:
+        from_attributes = True

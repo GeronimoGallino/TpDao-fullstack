@@ -3,6 +3,7 @@ from datetime import datetime
 
 class ClienteBase(BaseModel):
     nombre: str
+    apellido: str
     dni: str
     telefono: str | None = None
     email: str | None = None
@@ -16,7 +17,7 @@ class ClienteCreate(ClienteBase):
 
 class Cliente(ClienteBase):
     """Esquema de respuesta (incluye campos autogenerados)."""
-    id: int
+    id_cliente: int
     fecha_registro: datetime
     estado: bool  # 👈 se agrega para mostrar si está activo o no
 

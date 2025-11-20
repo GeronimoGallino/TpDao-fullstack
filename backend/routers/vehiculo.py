@@ -8,7 +8,7 @@ router = APIRouter(prefix="/vehiculos", tags=["Vehículos"])
 
 @router.post("/", response_model=schemas.Vehiculo)
 def crear_vehiculo(vehiculo: schemas.VehiculoCreate, db: Session = Depends(database.get_db)):
-    nuevo_vehiculo = Vehiculo(**vehiculo.dict())
+    nuevo_vehiculo = Vehiculo(**vehiculo.model_dump())
     db.add(nuevo_vehiculo)
     db.commit()
     db.refresh(nuevo_vehiculo)
@@ -16,7 +16,8 @@ def crear_vehiculo(vehiculo: schemas.VehiculoCreate, db: Session = Depends(datab
 
 @router.get("/", response_model=list[schemas.Vehiculo])
 def listar_vehiculos(db: Session = Depends(database.get_db)):
-    return db.query(Vehiculo).all()
+    # ✅ Solo listar vehículos dispnibles
+    return db.query(Vehiculo).filter(Vehiculo.disponible == True).all()
 
 @router.get("/{vehiculo_id}", response_model=schemas.Vehiculo)
 def obtener_vehiculo(vehiculo_id: int, db: Session = Depends(database.get_db)):
@@ -30,7 +31,7 @@ def actualizar_vehiculo(vehiculo_id: int, datos: schemas.VehiculoCreate, db: Ses
     vehiculo = db.query(Vehiculo).filter(Vehiculo.id == vehiculo_id).first()
     if not vehiculo:
         raise HTTPException(status_code=404, detail="Vehículo no encontrado")
-    for key, value in datos.dict().items():
+    for key, value in datos.model_dump().items():
         setattr(vehiculo, key, value)
     db.commit()
     db.refresh(vehiculo)
@@ -41,6 +42,7 @@ def eliminar_vehiculo(vehiculo_id: int, db: Session = Depends(database.get_db)):
     vehiculo = db.query(Vehiculo).filter(Vehiculo.id == vehiculo_id).first()
     if not vehiculo:
         raise HTTPException(status_code=404, detail="Vehículo no encontrado")
-    db.delete(vehiculo)
+    # ✅ Borrado lógico
+    vehiculo.disponible = False
     db.commit()
     return {"mensaje": "Vehículo eliminado correctamente"}

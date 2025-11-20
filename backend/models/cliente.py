@@ -6,8 +6,9 @@ from backend.database import Base  # 👈 importante este import
 class Cliente(Base):
     __tablename__ = "clientes"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id_cliente = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
+    apellido = Column(String, nullable=False)
     dni = Column(String, unique=True, nullable=False)
     telefono = Column(String)
     email = Column(String)

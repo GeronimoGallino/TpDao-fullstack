@@ -1,4 +1,6 @@
-from .cliente import Cliente, Base
-from .vehiculo import Vehiculo
+from backend.database import Base
 
+from .cliente import Cliente
 from .empleado import Empleado
+from .vehiculo import Vehiculo
+from .alquiler import Alquiler

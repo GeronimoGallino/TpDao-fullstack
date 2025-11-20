@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from backend import models
 from backend.database import engine, Base
-from backend.routers import cliente
+from backend.routers import cliente, vehiculo, empleado, alquiler
 
-from backend.routers import cliente as cliente_router
-from backend.routers import empleado as empleado_router
 # Crear tablas si no existen
 Base.metadata.create_all(bind=engine)
 
@@ -12,7 +10,10 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Incluir routers
-app.include_router(cliente.router)
+app.include_router(cliente.router, prefix="/api")
+app.include_router(vehiculo.router, prefix="/api")
+app.include_router(empleado.router, prefix="/api")
+app.include_router(alquiler.router, prefix="/api")
 
 @app.get("/")
 def root():
