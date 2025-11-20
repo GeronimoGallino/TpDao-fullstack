@@ -78,7 +78,7 @@ def obtener_alquiler(alquiler_id: int, db: Session = Depends(database.get_db)):
 @router.put("/{alquiler_id}/finalizar", response_model=schemas.Alquiler)
 def finalizar_alquiler(
     alquiler_id: int,
-    datos: schemas.AlquilerFinalizar,   # el front envía solo kilometraje_final
+    datos: schemas.AlquilerFinalizar,
     db: Session = Depends(database.get_db)
 ):
 
@@ -90,44 +90,67 @@ def finalizar_alquiler(
     if not alquiler:
         raise HTTPException(status_code=404, detail="Alquiler no encontrado o ya finalizado")
 
-    # 1. Fecha de finalización = ahora (ignora lo que mande el front)
+    # ----------------------------------------------------
+    # 1) Fecha fin (UTC)
+    # ----------------------------------------------------
     fecha_fin = datetime.now(timezone.utc)
-    # 2. Obtener vehículo asociado
+
+    # ----------------------------------------------------
+    # 2) Normalizar fecha_inicio (evita el ERROR)
+    # ----------------------------------------------------
+    fecha_inicio = alquiler.fecha_inicio
+
+    if fecha_inicio.tzinfo is None:
+        # Si vino naive desde la base → lo marcamos como UTC
+        fecha_inicio = fecha_inicio.replace(tzinfo=timezone.utc)
+    else:
+        # Si ya tiene TZ → lo normalizamos a UTC
+        fecha_inicio = fecha_inicio.astimezone(timezone.utc)
+
+    # ----------------------------------------------------
+    # 3) Obtener vehículo
+    # ----------------------------------------------------
     vehiculo = db.query(models.Vehiculo).filter(
         models.Vehiculo.id == alquiler.id_vehiculo
     ).first()
 
     if not vehiculo:
         raise HTTPException(status_code=400, detail="Vehículo asociado no existe")
-    
-    if alquiler.fecha_inicio.tzinfo is None:
-        ### FIX 2A: Si viene naïve desde la BD, lo convertimos a UTC
-        fecha_inicio = alquiler.fecha_inicio.replace(tzinfo=timezone.utc)
-    else:
-        ### FIX 2B: Si ya tiene TZ, forzamos a UTC para que coincida
-        fecha_inicio = alquiler.fecha_inicio.astimezone(timezone.utc)
 
-    # 3. Calcular días de alquiler
-    diferencia = fecha_fin - alquiler.fecha_inicio
-    dias = math.ceil(diferencia.total_seconds() / 86400)  # redondear hacia arriba
+    # ----------------------------------------------------
+    # 4) Calcular diferencia de tiempo
+    # ----------------------------------------------------
+    diferencia = fecha_fin - fecha_inicio
 
-    # 4. Costo total
-    if not hasattr(vehiculo, "costo_diario"):
+    # Convertir diferencia en días, redondeando hacia arriba
+    dias = math.ceil(diferencia.total_seconds() / 86400)
+
+    # Si la diferencia es menor a 1 día, mínimo 1 día
+    dias = max(dias, 1)
+
+    # ----------------------------------------------------
+    # 5) Calcular costo total
+    # ----------------------------------------------------
+    if vehiculo.costo_diario is None:
         raise HTTPException(status_code=500, detail="El vehículo no tiene costo_diario definido")
 
     costo_total = dias * vehiculo.costo_diario
 
-    # 5. Aplicar actualizaciones al alquiler
+    # ----------------------------------------------------
+    # 6) Actualizar alquiler
+    # ----------------------------------------------------
     alquiler.fecha_fin = fecha_fin
     alquiler.kilometraje_final = datos.kilometraje_final
     alquiler.costo_total = costo_total
     alquiler.estado = "finalizado"
 
-    # 6. Actualizar vehículo (marcar disponible + km final)
+    # ----------------------------------------------------
+    # 7) Actualizar vehículo (km + disponibilidad)
+    # ----------------------------------------------------
     vehiculo.disponible = True
-    if datos.kilometraje_final:
-        vehiculo.kilometraje = datos.kilometraje_final
+    vehiculo.kilometraje = datos.kilometraje_final
 
+    # Guardar cambios
     db.commit()
     db.refresh(alquiler)
 
