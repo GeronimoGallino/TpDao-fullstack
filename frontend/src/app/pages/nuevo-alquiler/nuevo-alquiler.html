@@ -1,0 +1,27 @@
+<div class="alquileres-crud container">
+  <h2>Generar un nuevo contrato de alquiler</h2>
+
+  <div class="alquiler-form" *ngIf="selectedAlquiler">
+    <h3>{{ 'Nuevo alquiler' }}</h3>
+    <form #alquilerForm="ngForm" (ngSubmit)="saveAlquiler()">
+      <div>
+        <label>Cliente</label>
+        <select name="id_cliente" required [(ngModel)]="selectedAlquiler.id_cliente">
+          <option value="">Seleccionar cliente</option>
+          <option *ngFor="let c of clientes" [value]="c.id_cliente">{{ c.nombre }}</option>
+        </select>
+      </div>
+      <div>
+        <label>Vehículo</label>
+        <select name="id_vehiculo" required [(ngModel)]="selectedAlquiler.id_vehiculo">
+          <option value="">Seleccionar vehículo</option>
+          <option *ngFor="let v of vehiculos" [value]="v.id_vehiculo">{{ v.marca }} {{ v.modelo }} ({{ v.patente }})
+          </option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" [disabled]="!datosCorrectos()">{{ 'Crear' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

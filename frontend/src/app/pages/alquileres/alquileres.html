@@ -1,0 +1,329 @@
+<div class="alquileres-crud container">
+  <h2>Gestión de Alquileres</h2>
+
+  <div class="actions">
+    <input type="text" placeholder="Buscar por cliente, vehículo o estado..." [(ngModel)]="filter"
+      (ngModelChange)="applyFilter()" />
+  </div>
+
+  <table class="alquileres-table" *ngIf="alquileres && alquileres.length; else emptyList">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Vehículo</th>
+        <th>Empleado</th>
+        <th>Fecha inicio</th>
+        <th>Fecha fin</th>
+        <th>Km inicio</th>
+        <th>Km fin</th>
+        <th>Costo total</th>
+        <th>Contrato</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of alquileresFiltered">
+        <td>{{ a.id_alquiler }}</td>
+        <td>{{ a.cliente.nombre || 'N/A' }}</td>
+        <td>{{ (a.vehiculo.marca || 'N/A') }} {{ (a.vehiculo.modelo || '') }}</td>
+        <td>{{ a.empleado.nombre || 'N/A' }}</td>
+        <td>{{ a.fecha_inicio | date:'shortDate' }}</td>
+        <td>{{ a.fecha_fin ? (a.fecha_fin | date:'shortDate') : ''}}</td>
+        <td>{{ a.kilometraje_inicio }}</td>
+        <td>{{ a.kilometraje_fin }}</td>
+        <td>{{ a.costo_total ? ('$' + a.costo_total) : '' }}</td>
+        <td class="acciones">
+          <button class="boton-ver" (click)="verContrato(a)" *ngIf="a.fecha_fin">Ver</button>
+          <button class="boton-fin" (click)="finalizarContrato(a)" *ngIf="!a.fecha_fin">Finalizar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay alquileres registrados.</p>
+  </ng-template>
+
+  <div class="finalizarContrato-overlay" *ngIf="finalizarVisible">
+    <div class="finalizar-card">
+      <h2 class="titulo">
+        Finalizar Contrato de Alquiler Nº {{ alquilerFinalizar?.id_alquiler }}
+      </h2>
+      <div class="finalizar-texto">
+        <p>
+          ¿Está seguro que desea finalizar el contrato de alquiler del vehículo
+          <strong class="subrayado">
+            {{ alquilerFinalizar?.vehiculo?.marca || 'FALSO: Marca' }}
+            {{ alquilerFinalizar?.vehiculo?.modelo || 'FALSO: Modelo' }}
+          </strong>
+          con placa Nº
+          <strong class="subrayado">
+            {{ alquilerFinalizar?.vehiculo?.patente || 'FALSO: Patente' }}
+          </strong>?
+        </p>
+        <p>
+          Al finalizar el contrato, se registrará la fecha de devolución y el kilometraje final del vehículo.
+        </p>
+        <label for="kmFinal">Kilometraje Final:</label>
+        <input type="number" id="kmFinal" [(ngModel)]="kilometrajeFinal" />
+      </div>
+      <div class="form-actions">
+        <button (click)="confirmarFinalizacion()">Finalizar</button>
+        <button (click)="cerrarFinalizar()">Cancelar</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="contrato-overlay" *ngIf="contratoVisible">
+  
+  <button class="cerrar" (click)="cerrarContrato()">Cerrar</button>
+  <div class="contrato-card" #contratoCard>
+
+    <h2 style="text-align: center;">CONTRATO DE ALQUILER DE VEHÍCULOS Nº {{ alquilerContrato?.id_alquiler }}</h2>
+
+    <div class="contrato-texto" style="text-align: justify; padding: 0 15px;">
+      <p>
+        Conste por el presente documento el contrato de arrendamiento que celebran de una parte don
+        <strong style="text-decoration: underline;">FALSO: Juan Pérez García</strong>, identificado con D.N.I. Nº
+        <strong style="text-decoration: underline;">FALSO: 12345678</strong>,
+        de estado civil soltero y con domicilio en <strong style="text-decoration: underline;">FALSO: Calle Falsa N°
+          123, Lima</strong>, a quien en lo sucesivo se denominará
+        <strong>EL ARRENDADOR</strong>; y de otra parte don
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.cliente?.nombre || 'FALSO: Nombre no
+          disponible' }}</strong>, identificado con D.N.I. Nº
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.cliente?.dni || 'FALSO: DNI no disponible'
+          }}</strong>, de estado civil soltero y con domicilio en
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.cliente?.direccion || 'FALSO: Dirección no
+          disponible' }}</strong>, a quien en lo sucesivo se denominará
+        <strong>EL ARRENDATARIO</strong>, con intervención de don <strong style="text-decoration: underline;">FALSO:
+          Pedro López</strong>, identificado con D.N.I. Nº
+        <strong style="text-decoration: underline;">FALSO: 87654321</strong> en calidad de <strong>FIADOR</strong>, en
+        los términos siguientes:
+      </p>
+
+      <p><strong>PRIMERO</strong></p>
+      <p>
+        EL ARRENDADOR es propietario del vehículo usado, marca <strong style="text-decoration: underline;">{{
+          alquilerContrato?.vehiculo?.marca || 'FALSO: Marca' }}</strong>,
+        modelo <strong style="text-decoration: underline;">{{ alquilerContrato?.vehiculo?.modelo || 'FALSO: Modelo'
+          }}</strong>, año de fabricación <strong style="text-decoration: underline;">FALSO: 2020</strong>,
+        de color <strong style="text-decoration: underline;">FALSO: Gris Metálico</strong>, Nº de motor <strong
+          style="text-decoration: underline;">FALSO: A1B2C3D4E5</strong>,
+        Nº de serie <strong style="text-decoration: underline;">FALSO: PQRST6789</strong> y con placa de rodaje Nº
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.vehiculo?.patente || 'FALSO: Patente'
+          }}</strong>.
+      </p>
+
+      <p><strong>SEGUNDO</strong></p>
+      <p>
+        EL ARRENDADOR deja constancia que el vehículo a que se refiere la cláusula anterior se encuentra en buen estado
+        de funcionamiento mecánico y conservación de carrocería, pintura y accesorios, sin mayor desgaste que el
+        producido por el uso normal y ordinario.
+      </p>
+
+      <p><strong>TERCERO</strong></p>
+      <p>
+        Por el presente contrato, EL ARRENDADOR se obliga a ceder el uso del bien descrito en la cláusula primera en
+        favor de EL ARRENDATARIO, a título de arrendamiento. Por su parte, EL ARRENDATARIO se obliga a pagar a EL
+        ARRENDADOR el monto de la renta pactada en la cláusula siguiente, en la forma y oportunidad convenidas.
+      </p>
+
+      <p><strong>CUARTO</strong></p>
+      <p>
+        Las partes acuerdan que el monto de la renta que pagará EL ARRENDATARIO en calidad de contraprestación por el
+        uso del bien, asciende a la suma de S/.
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.costo_total || 'FALSO: 500' }}</strong>
+        (<strong style="text-decoration: underline;">FALSO: Quinientos</strong> y 00/100 nuevos soles) mensuales;
+        cantidad que será cancelada en dinero, en la forma y oportunidad a que se refiere la cláusula siguiente.
+      </p>
+
+      <p><strong>QUINTO</strong></p>
+      <p>
+        La forma de pago de la renta será por mensualidades adelantadas que EL ARRENDATARIO pagará, en el domicilio de
+        EL ARRENDADOR, el primer día útil de cada mes.
+      </p>
+
+      <p><strong>SEXTO</strong></p>
+      <p>
+        Las partes convienen fijar un plazo de duración determinada para el presente contrato, el cual será de
+        <strong style="text-decoration: underline;">30</strong> (<strong
+          style="text-decoration: underline;">Treinta</strong>) días que se computarán a partir de la fecha de
+        suscripción de este documento (<strong style="text-decoration: underline;">{{ alquilerContrato?.fecha_inicio
+          }}</strong>) hasta el día
+        <strong style="text-decoration: underline;">{{ alquilerContrato?.fecha_fin }}</strong>; fecha en la que EL
+        ARRENDATARIO está obligado a devolver el bien arrendado.
+      </p>
+
+      <p><strong>SÉTIMO</strong></p>
+      <p>
+        EL ARRENDADOR se obliga a entregar el bien objeto de la prestación a su cargo en la fecha de suscripción de este
+        documento, sin más constancia que las firmas de las partes puestas en él. Esta obligación se verificará con la
+        entrega física del vehículo, las llaves y la tarjeta de propiedad del mismo.
+      </p>
+
+      <p><strong>OCTAVO</strong></p>
+      <p>
+        EL ARRENDATARIO se obliga a pagar puntualmente el monto de la renta, en la forma, oportunidad y lugar pactados,
+        con sujeción a lo convenido en las cláusulas cuarta y quinta.
+      </p>
+
+      <p><strong>NOVENO</strong></p>
+      <p>
+        EL ARRENDATARIO se obliga destinar el bien arrendado única y exclusivamente para uso o transporte particular. En
+        consecuencia queda establecido que EL ARRENDATARIO es la única persona autorizada para conducir el vehículo, sin
+        poder emplearlo para transporte de carga, servicio de taxi, colectivo o análogo.
+      </p>
+
+      <p><strong>DÉCIMO</strong></p>
+      <p>
+        Las partes acuerdan que EL ARRENDATARIO no podrá exceder el recorrido de <strong
+          style="text-decoration: underline;">1500</strong> kms. Durante todo el plazo del contrato, dejándose
+        constancia que a la fecha el kilometraje del vehículo es de <strong style="text-decoration: underline;">FALSO:
+          25000</strong> kms. Asimismo, queda convenido que EL ARRENDATARIO no podrá conducir ni trasladar el vehículo
+        fuera de los límites geográficos de la provincia de Lima.
+      </p>
+
+      <p><strong>DÉCIMO PRIMERO</strong></p>
+      <p>
+        De otro lado, EL ARRENDATARIO está obligado a efectuar por cuenta y costo propio las reparaciones y
+        mantenimientos que sean necesarios para conservar el vehículo en el mismo estado en que fue recibido, en cuyo
+        caso deberá optar por repuestos originales y servicio de primera categoría.
+      </p>
+
+      <p><strong>DÉCIMO SEGUNDO</strong></p>
+      <p>
+        Así también, EL ARRENDATARIO queda prohibido de introducir mejoras, cambios o alteraciones internas y externas
+        en el bien arrendado y sus accesorios, sin el consentimiento expreso y por escrito de EL ARRENDADOR.
+      </p>
+
+      <p><strong>DÉCIMO TERCERO</strong></p>
+      <p>
+        Queda entendido que mientras el vehículo se encuentre en posesión de EL ARRENDATARIO, éste responderá en forma
+        exclusiva y excluyente por los daños causados a terceras personas viajen o no en el interior del vehículo; por
+        los daños causados a la propiedad privada o pública; así como por las trasgresiones al reglamento de tránsito
+        vigente en el país.
+      </p>
+
+      <p><strong>DÉCIMO CUARTO</strong></p>
+      <p>
+        EL ARRENDATARIO no podrá ceder a terceros el bien materia del presente contrato bajo ningún título, ni
+        subarrendarlo, ni ceder su posición contractual, salvo que cuente con el asentimiento expreso y por escrito de
+        EL ARRENDADOR, en cuyo caso se suscribirán los documentos que fueren necesarios.
+      </p>
+
+      <p><strong>DÉCIMO QUINTO</strong></p>
+      <p>
+        EL ARRENDATARIO se obliga a devolver el bien arrendado en la fecha de vencimiento del plazo estipulado en la
+        cláusula sexta de este contrato. Una vez efectuada la devolución EL ARRENDADOR no responderá por el deterioro,
+        destrucción, pérdida o sustracción de los bienes y valores de cualquier especie, de propiedad de EL ARRENDATARIO
+        o de terceros, dejados al interior del vehículo.
+      </p>
+
+      <p><strong>DÉCIMO SEXTO</strong></p>
+      <p>
+        El incumplimiento de la obligación establecida en la cláusula décima cuarta constituirá causal de resolución del
+        presente contrato, al amparo del artículo 1430º del Código Civil. En consecuencia, la resolución se producirá de
+        pleno derecho cuando EL ARRENDADOR comunique vía carta notarial a EL ARRENDATARIO que quiere valerse de esta
+        cláusula.
+      </p>
+
+      <p><strong>DÉCIMO SÉTIMO</strong></p>
+      <p>
+        En la fecha de suscripción del presente documento EL ARRENDATARIO entrega a EL ARRENDADOR la suma de S/. <strong
+          style="text-decoration: underline;">FALSO: 1000</strong> (<strong style="text-decoration: underline;">FALSO:
+          Mil</strong> y 00/100 nuevos soles) equivalente a <strong style="text-decoration: underline;">2</strong> meses
+        de renta, en calidad de depósito, en garantía del absoluto cumplimiento de todas las obligaciones asumidas en
+        virtud de este contrato.
+      </p>
+      <p>
+        El mencionado depósito en garantía le será devuelto a EL ARRENDATARIO, sin intereses o rentas, al vencimiento
+        del presente contrato y una vez verificado el estado de conservación y funcionamiento del bien arrendado.
+      </p>
+
+      <p><strong>DÉCIMO OCTAVO</strong></p>
+      <p>
+        Las partes dejan establecido que el depósito en garantía a que se refiere la cláusula anterior, no podrá ser
+        destinado a cubrir el pago de la renta de ningún periodo, y sólo se empleará para cubrir los eventuales daños
+        ocasionados al bien arrendado.
+      </p>
+
+      <p><strong>DÉCIMO NOVENO</strong></p>
+      <p>
+        En este contrato participa don <strong style="text-decoration: underline;">FALSO: Pedro López</strong>,
+        identificado con D.N.I. Nº <strong style="text-decoration: underline;">FALSO: 87654321</strong>, de estado civil
+        soltero y domiciliado en <strong style="text-decoration: underline;">FALSO: Av. Falsa 456, Lima</strong>, quien
+        voluntariamente se constituye en fiador de la obligación asumida por EL ARRENDATARIO. Dicha fianza se realiza en
+        calidad de ilimitada, irrevocable, indivisible y de ejecución inmediata.
+      </p>
+      <p>
+        Asimismo, conforme al inciso 1ro. Del artículo 1883º del Código Civil, se deja constancia que el fiador hace
+        expresa renuncia al derecho de excusión, por lo que, para la ejecución de la garantía, no será necesario el
+        requerimiento previo de los bienes de EL ARRENDATARIO.
+      </p>
+
+      <p><strong>VIGÉSIMO</strong></p>
+      <p>
+        Las partes acuerdan que todos los gastos y tributos que origine la celebración y ejecución de este contrato,
+        serán asumidos por ambas en forma equivalente.
+      </p>
+
+      <p><strong>VIGÉSIMO PRIMERO</strong></p>
+      <p>
+        Todo litigio o controversia, derivados o relacionados con este acto jurídico, será resuelto mediante arbitraje,
+        de conformidad con los Reglamentos Arbitrales del Centro de Arbitraje de la Cámara de Comercio de Lima, a cuyas
+        normas, administración y decisión se someten las partes en forma incondicional, declarando conocerlas y
+        aceptarlas en su integridad.
+      </p>
+
+      <p><strong>VIGÉSIMO SEGUNDO</strong></p>
+      <p>
+        Para la validez de todas las comunicaciones y notificaciones a las partes, con motivo de la ejecución de este
+        contrato, ambas señalan como sus respectivos domicilios los indicados en la introducción de este documento. El
+        cambio de domicilio de cualquiera de las partes surtirá efecto desde la fecha de comunicación de dicho cambio a
+        la otra parte, por cualquier medio escrito.
+      </p>
+
+      <p><strong>VIGÉSIMO TERCERO</strong></p>
+      <p>
+        En lo no previsto por las partes en el presente contrato, ambas se someten a lo establecido por las normas del
+        Código Civil y demás del sistema jurídico que resulten aplicables.
+      </p>
+
+      <p style="text-align: center; margin-top: 20px;">
+        En señal de conformidad las partes suscriben este documento en la ciudad de <strong
+          style="text-decoration: underline;">FALSO: Lima</strong>, a los <strong style="text-decoration: underline;">{{
+          (alquilerContrato?.fecha_inicio | date: 'dd') || 'FALSO: 20' }}</strong> días del mes de <strong
+          style="text-decoration: underline;">{{ (alquilerContrato?.fecha_inicio | date: 'MMMM') || 'FALSO: Noviembre'
+          }}</strong> de <strong style="text-decoration: underline;">{{ (alquilerContrato?.fecha_inicio | date: 'yyyy')
+          || 'FALSO: 2025' }}</strong>.
+      </p>
+
+      <br>
+      <br>
+
+      <table style="width: 100%; border: none; text-align: center;">
+        <tr>
+          <td style="width: 50%;">
+            <div style="border-top: 1px solid #000; padding-top: 5px;">EL ARRENDADOR</div>
+          </td>
+          <td style="width: 50%;">
+            <div style="border-top: 1px solid #000; padding-top: 5px;">EL ARRENDATARIO</div>
+          </td>
+        </tr>
+      </table>
+
+      <h3 style="margin-top: 20px;">Firma de EL ARRENDATARIO</h3>
+      <canvas #firmaCanvas width="400" height="200" (mousedown)="startDraw($event)" (mouseup)="endDraw()"
+        (mousemove)="draw($event)" style="border:1px solid #000; background:white; margin-top:10px;">
+      </canvas>
+      <br>
+
+    </div>
+
+  </div>
+  
+    <button class="cerrar" (click)="descargarContrato()">Descargar</button>
+</div>

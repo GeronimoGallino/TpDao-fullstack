@@ -1,0 +1,87 @@
+<div class="clientes-crud container">
+  <h2>Gestión de Clientes</h2>
+
+  <!-- Barra de acciones -->
+  <div class="actions">
+    <input type="text" placeholder="Buscar por nombre o DNI" [(ngModel)]="filter" (ngModelChange)="applyFilter()" />
+    <button (click)="newCliente()">Nuevo cliente</button>
+  </div>
+
+  <!-- Lista de clientes -->
+  <table class="clientes-table" *ngIf="clientes && clientes.length; else emptyList">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Dirección</th>
+        <th>Fecha registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of clientesFiltered; let i = index">
+        <td>{{ c.id_cliente }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.dni }}</td>
+        <td>{{ c.telefono }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.direccion }}</td>
+        <td>{{ c.fecha_registro | date:'shortDate' }}</td>
+        <td>
+          <button (click)="editCliente(c)">Editar</button>
+          <button (click)="confirmDelete(c)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay clientes registrados.</p>
+  </ng-template>
+
+  <!-- Formulario crear / editar -->
+  <div class="cliente-form" *ngIf="selectedCliente">
+    <h3>{{ isEditing ? 'Editar cliente' : 'Nuevo cliente' }}</h3>
+    <form #clienteForm="ngForm" (ngSubmit)="saveCliente()">
+      <div>
+        <label>Nombre</label>
+        <input name="nombre" required [(ngModel)]="selectedCliente.nombre" />
+      </div>
+      <div>
+        <label>DNI</label>
+        <input name="dni" required [(ngModel)]="selectedCliente.dni" />
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input name="telefono" [(ngModel)]="selectedCliente.telefono" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="selectedCliente.email" />
+      </div>
+      <div>
+        <label>Dirección</label>
+        <input name="direccion" [(ngModel)]="selectedCliente.direccion" />
+      </div>
+      <div>
+        <label>Fecha registro</label>
+        <input type="date" name="fecha_registro" [(ngModel)]="selectedCliente.fecha_registro" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="clienteForm.invalid">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Confirmación de borrado -->
+  <div class="confirm-delete" *ngIf="toDeleteCliente">
+    <p>¿Eliminar a <strong>{{ toDeleteCliente.nombre }}</strong> (DNI: {{ toDeleteCliente.dni }})?</p>
+    <button (click)="deleteCliente(toDeleteCliente)">Sí, eliminar</button>
+    <button (click)="toDeleteCliente = null">No</button>
+  </div>
+</div>

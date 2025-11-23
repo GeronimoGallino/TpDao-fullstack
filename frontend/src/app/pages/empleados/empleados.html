@@ -1,0 +1,87 @@
+<div class="empleados-crud container">
+  <h2>Gestión de Empleados</h2>
+
+  <div class="actions">
+    <input type="text" placeholder="Buscar por nombre, DNI o cargo" [(ngModel)]="filter" (ngModelChange)="applyFilter()" />
+    <button (click)="newEmpleado()">Nuevo empleado</button>
+  </div>
+
+  <table class="empleados-table" *ngIf="empleados && empleados.length; else emptyList">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Cargo</th>
+        <th>Fecha inicio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of empleadosFiltered">
+        <td>{{ e.id_empleado }}</td>
+        <td>{{ e.nombre }}</td>
+        <td>{{ e.dni }}</td>
+        <td>{{ e.telefono }}</td>
+        <td>{{ e.email }}</td>
+        <td>{{ e.cargo }}</td>
+        <td>{{ e.fecha_inicio | date:'shortDate' }}</td>
+        <td>
+          <button (click)="editEmpleado(e)">Editar</button>
+          <button (click)="confirmDelete(e)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay empleados registrados.</p>
+  </ng-template>
+
+  <div class="empleado-form" *ngIf="selectedEmpleado">
+    <h3>{{ isEditing ? 'Editar empleado' : 'Nuevo empleado' }}</h3>
+    <form #empleadoForm="ngForm" (ngSubmit)="saveEmpleado()">
+      <div>
+        <label>Nombre</label>
+        <input name="nombre" required [(ngModel)]="selectedEmpleado.nombre" />
+      </div>
+      <div>
+        <label>DNI</label>
+        <input name="dni" required [(ngModel)]="selectedEmpleado.dni" />
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input name="telefono" [(ngModel)]="selectedEmpleado.telefono" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="selectedEmpleado.email" />
+      </div>
+      <div>
+        <label>Cargo</label>
+        <input name="cargo" [(ngModel)]="selectedEmpleado.cargo" />
+      </div>
+      <div>
+        <label>ID Negocio</label>
+        <input type="number" name="id_negocio" [(ngModel)]="selectedEmpleado.id_negocio" />
+      </div>
+      <div>
+        <label>Fecha inicio</label>
+        <input type="date" name="fecha_inicio" [(ngModel)]="selectedEmpleado.fecha_inicio" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="empleadoForm.invalid">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="confirm-delete" *ngIf="toDeleteEmpleado">
+    <p>¿Eliminar a <strong>{{ toDeleteEmpleado.nombre }}</strong> (DNI: {{ toDeleteEmpleado.dni }})?</p>
+    <button (click)="deleteEmpleado(toDeleteEmpleado)">Sí, eliminar</button>
+    <button (click)="toDeleteEmpleado = null">No</button>
+  </div>
+</div>

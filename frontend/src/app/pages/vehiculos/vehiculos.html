@@ -1,0 +1,107 @@
+<div class="vehiculos-crud container">
+  <h2>Gestión de Vehículos</h2>
+
+  <div class="actions">
+    <input type="text" placeholder="Buscar..." [(ngModel)]="filter" (ngModelChange)="applyFilter()" />
+    <button (click)="newVehiculo()">Nuevo vehículo</button>
+  </div>
+
+  <table class="vehiculos-table" *ngIf="vehiculos && vehiculos.length; else emptyList">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Año</th>
+        <th>Patente</th>
+        <th>Tipo</th>
+        <th>Kilometraje</th>
+        <th>Disponible</th>
+        <th>Costo diario</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of vehiculosFiltered">
+        <td>{{ v.id_vehiculo }}</td>
+        <td>{{ v.marca }}</td>
+        <td>{{ v.modelo }}</td>
+        <td>{{ v.anio }}</td>
+        <td>{{ v.patente }}</td>
+        <td>{{ v.tipo }}</td>
+        <td>{{ v.kilometraje }}</td>
+        <td>
+          <span class="badge" [class.disponible]="v.disponible" [class.no-disponible]="!v.disponible">
+            {{ v.disponible ? 'Sí' : 'No' }}
+          </span>
+        </td>
+        <td>${{ v.costo_diario }}</td>
+        <td>{{ v.estado }}</td>
+        <td>
+          <button (click)="editVehiculo(v)">Editar</button>
+          <button (click)="confirmDelete(v)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay vehículos registrados.</p>
+  </ng-template>
+
+  <div class="vehiculo-form" *ngIf="selectedVehiculo">
+    <h3>{{ isEditing ? 'Editar vehículo' : 'Nuevo vehículo' }}</h3>
+    <form #vehiculoForm="ngForm" (ngSubmit)="saveVehiculo()">
+      <div>
+        <label>Marca</label>
+        <input name="marca" required [(ngModel)]="selectedVehiculo.marca" />
+      </div>
+      <div>
+        <label>Modelo</label>
+        <input name="modelo" required [(ngModel)]="selectedVehiculo.modelo" />
+      </div>
+      <div>
+        <label>Año</label>
+        <input type="number" name="año" required [(ngModel)]="selectedVehiculo.anio" />
+      </div>
+      <div>
+        <label>Patente</label>
+        <input name="patente" required [(ngModel)]="selectedVehiculo.patente" />
+      </div>
+      <div>
+        <label>Tipo</label>
+        <input name="tipo" [(ngModel)]="selectedVehiculo.tipo" />
+      </div>
+      <div>
+        <label>Kilometraje</label>
+        <input type="number" name="kilometraje" [(ngModel)]="selectedVehiculo.kilometraje" />
+      </div>
+      <div>
+        <label>Costo diario</label>
+        <input type="number" step="0.01" name="costo_diario" [(ngModel)]="selectedVehiculo.costo_diario" />
+      </div>
+      <div>
+        <label>Estado</label>
+        <input name="estado" [(ngModel)]="selectedVehiculo.estado" />
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" name="disponible" [(ngModel)]="selectedVehiculo.disponible" />
+          Disponible
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="vehiculoForm.invalid">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="confirm-delete" *ngIf="toDeleteVehiculo">
+    <p>¿Eliminar <strong>{{ toDeleteVehiculo.marca }} {{ toDeleteVehiculo.modelo }}</strong> (Patente: {{ toDeleteVehiculo.patente }})?</p>
+    <button (click)="deleteVehiculo(toDeleteVehiculo)">Sí, eliminar</button>
+    <button (click)="toDeleteVehiculo = null">No</button>
+  </div>
+</div>

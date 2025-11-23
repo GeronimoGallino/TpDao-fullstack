@@ -1,0 +1,301 @@
+:root {
+  --bg: #f7fafc;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+  --radius: 8px;
+  --gap: 12px;
+  --pad: 16px;
+}
+
+.alquileres-crud {
+  background: var(--bg);
+  padding: calc(var(--pad) * 1.25);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  color: #111827;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  max-width: 1300px;
+  margin: 20px auto;
+}
+
+.alquileres-crud h2 { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 600; }
+
+.actions {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.actions input[type="text"] {
+  flex: 1 1 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  outline: none;
+}
+
+.actions button {
+  background: var(--accent);
+  color: gray;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.alquileres-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+}
+
+.alquileres-table thead { background: #f3f4f6; }
+.alquileres-table th, .alquileres-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.alquileres-table tbody tr:nth-child(even) { background: #fbfdff; }
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge.activo { background: #fef3c7; color: #92400e; }
+.badge.completado { background: #d1fae5; color: #065f46; }
+.badge.cancelado { background: #fee2e2; color: #991b1b; }
+
+.alquileres-table td:last-child { white-space: nowrap; width: 140px; }
+
+.alquileres-table button {
+  margin-right: 6px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  align-items: center;
+}
+.boton-ver { background: #059669; color: #fff; }
+.boton-fin { background: gray; color: #fff; border-color: rgba(220,38,38,0.08); }
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.alquileres-table td button{
+  vertical-align: middle;
+}
+
+
+.alquiler-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: var(--pad);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.alquiler-form h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.05rem; }
+
+.alquiler-form form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.alquiler-form label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+
+.alquiler-form input[type="text"],
+.alquiler-form input[type="number"],
+.alquiler-form input[type="date"],
+.alquiler-form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.form-actions button { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; }
+.form-actions button[type="submit"] { background: var(--accent); color: #fff; }
+.form-actions button[type="button"] { background: #fff; color: #374151; border: 1px solid var(--border); }
+
+.confirm-delete {
+  background: #fff7f7;
+  border: 1px solid rgba(220,38,38,0.12);
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .alquileres-table { font-size: 0.8rem; }
+  .alquileres-table th, .alquileres-table td { padding: 6px 8px; }
+}
+
+@media (max-width: 760px) {
+  .alquileres-table th:nth-child(1), .alquileres-table td:nth-child(1) { display: none; }
+  .alquileres-table th:nth-child(7), .alquileres-table td:nth-child(7) { display: none; }
+  .alquileres-table th:nth-child(8), .alquileres-table td:nth-child(8) { display: none; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .form-actions { flex-direction: column-reverse; }
+}
+
+
+.contrato-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* IMPORTANTE: para permitir scroll */
+  padding: 40px 0;
+  overflow-y: auto; /* AHORA podés bajar/subir */
+  z-index: 9999;
+}
+
+.contrato-card {
+  background: white;
+  width: 210mm;          /* Tamaño A4 */
+  min-height: 297mm;     /* Alto A4 */
+  padding: 25mm;         /* Márgenes REALES de contrato */
+  
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  border-radius: 4px;
+  
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #000;
+}
+
+.contrato-card h2 {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+}
+
+.contrato-card h3 {
+  font-size: 16px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.contrato-card p {
+  margin: 4px 0 10px 0;
+}
+
+.cerrar {
+  position: relative;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: optional;
+  background-color: gray;
+  margin-left: 20px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 8px 14px;
+  border: 1px solid #000;
+  background: gray;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+
+/* Form */
+.finalizar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: var(--pad);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.finalizar-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.finalizar-card form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.finalizar-card label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.finalizar-card input,
+.finalizar-card textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+
+.finalizar-card button {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+
+.finalizar-card input[type="date"] {
+  padding: 7px 10px;
+}

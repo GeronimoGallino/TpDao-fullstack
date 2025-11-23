@@ -1,0 +1,28 @@
+<div class="clientes-crud container">
+    <h2>Reporte de Top de Vehiculos más alquilados</h2>
+    <label for="cliente">Cantidad:</label>
+    <input type="number" id="cantidad" [(ngModel)]="cantidad" (change)="onCantidadChange()" min="1" />
+    <table class="clientes-table" *ngIf="alquileres && alquileres.length; else sinDatos">
+        <thead>
+            <tr>
+                <th>Vehículo</th>
+                <th>Patente</th>
+                <th>Veces alquilado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let a of alquileres">
+                <td>{{ a.marca }} {{ a.modelo }}</td>
+                <td>{{ a.patente }}</td>
+                <td>{{ a.veces_alquilado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #sinDatos>
+        <p *ngIf="clienteSeleccionado && (!alquileres || alquileres.length === 0)">
+            No se encontraron vehiculos en ese ranking.
+        </p>
+    </ng-template>
+</div>

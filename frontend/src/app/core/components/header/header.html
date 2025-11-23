@@ -1,0 +1,60 @@
+<header>
+  <nav class="navbar">
+    <div (click)="navegar('')" class="home">
+      <h1 class="logo">Gestión de Alquileres de Autos</h1>
+    </div>
+
+    <ul class="menu">
+      <li class="item">
+        <span>Gestión de Datos</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('clientes')">Clientes</a></li>
+          <li><a (click)="navegar('vehiculos')">Vehículos</a></li>
+          <li><a (click)="navegar('empleados')">Empleados</a></li>
+        </ul>
+      </li>
+
+      <li class="item">
+        <span>Alquileres</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('alquileres/nuevo')">Nuevo Alquiler</a></li>
+          <li><a (click)="navegar('alquileres')">Listado de Alquileres</a></li>
+        </ul>
+      </li>
+
+      <li class="item">
+        <span>Mantenimiento</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('mantenimientos/nuevo')">Registrar Nuevo</a></li>
+          <li><a (click)="navegar('mantenimientos')">Historial</a></li>
+          <li><a (click)="navegar('mantenimientos/pendientes')">Pendientes</a></li>
+        </ul>
+      </li>
+
+      <li class="item">
+        <span>Multas y Daños</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('multas')">Multas</a></li>
+          <li><a (click)="navegar('danos')">Daños</a></li>
+        </ul>
+      </li>
+
+      <li class="item">
+        <span>Reportes</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('reportes/alquileres')">Alquileres por Cliente</a></li>
+          <li><a (click)="navegar('reportes/vehiculos')">Vehículos más alquilados</a></li>
+          <li><a (click)="navegar('reportes/periodo')">Alquileres por Período</a></li>
+          <li><a (click)="navegar('reportes/facturacion')">Facturación Mensual</a></li>
+        </ul>
+      </li>
+
+      <li class="item">
+        <span>Seguridad</span>
+        <ul class="submenu">
+          <li><a (click)="navegar('usuarios')">Usuarios y Roles</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,160 @@
+:root {
+  --bg: #f7fafc;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+  --radius: 8px;
+  --gap: 12px;
+  --pad: 16px;
+}
+
+.vehiculos-crud {
+  background: var(--bg);
+  padding: calc(var(--pad) * 1.25);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  color: #111827;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.vehiculos-crud h2 { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 600; }
+
+.actions {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.actions input[type="text"] {
+  flex: 1 1 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  outline: none;
+}
+
+.actions button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.vehiculos-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.vehiculos-table thead { background: #f3f4f6; }
+.vehiculos-table th, .vehiculos-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.vehiculos-table tbody tr:nth-child(even) { background: #fbfdff; }
+
+.badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge.disponible { background: #d1fae5; color: #065f46; }
+.badge.no-disponible { background: #fee2e2; color: #991b1b; }
+
+.vehiculos-table td:last-child { white-space: nowrap; width: 140px; }
+
+.vehiculos-table button {
+  margin-right: 6px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.vehiculos-table button:first-of-type { background: #059669; color: #fff; }
+.vehiculos-table button:last-of-type { background: #fff; color: var(--danger); border-color: rgba(220,38,38,0.08); }
+
+.vehiculo-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: var(--pad);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.vehiculo-form h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.05rem; }
+
+.vehiculo-form form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.vehiculo-form label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; }
+
+.vehiculo-form input[type="text"],
+.vehiculo-form input[type="number"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+
+.vehiculo-form input[type="checkbox"] { margin-right: 6px; }
+.vehiculo-form label:has(input[type="checkbox"]) { display: flex; align-items: center; margin-bottom: 0; }
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.form-actions button { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; }
+.form-actions button[type="submit"] { background: var(--accent); color: #fff; }
+.form-actions button[type="button"] { background: #fff; color: #374151; border: 1px solid var(--border); }
+
+.confirm-delete {
+  background: #fff7f7;
+  border: 1px solid rgba(220,38,38,0.12);
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .vehiculos-table { font-size: 0.85rem; }
+  .vehiculos-table th, .vehiculos-table td { padding: 6px 8px; }
+}
+
+@media (max-width: 760px) {
+  .vehiculos-table th:nth-child(1), .vehiculos-table td:nth-child(1) { display: none; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .form-actions { flex-direction: column-reverse; }
+}

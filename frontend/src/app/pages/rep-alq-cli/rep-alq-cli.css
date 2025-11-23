@@ -1,0 +1,104 @@
+:root {
+  --bg: #f7fafc;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+  --radius: 8px;
+  --gap: 12px;
+  --pad: 16px;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.clientes-crud {
+  background: var(--bg);
+  padding: calc(var(--pad) * 1.25);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  color: #111827;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  max-width: 1300px;
+  margin: 20px auto;
+}
+
+.clientes-crud h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* SELECTOR */
+.clientes-crud label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.clientes-crud select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  margin-bottom: 12px;
+}
+
+/* TABLA */
+.clientes-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.clientes-table thead {
+  background: #f3f4f6;
+}
+
+.clientes-table th,
+.clientes-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.clientes-table tbody tr:nth-child(even) {
+  background: #fbfdff;
+}
+
+/* BADGES PARA ESTADO */
+.badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge.En\ curso { background: #fef3c7; color: #92400e; }
+.badge.Finalizado { background: #d1fae5; color: #065f46; }
+.badge.Cancelado { background: #fee2e2; color: #991b1b; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .clientes-table {
+    font-size: 0.8rem;
+  }
+  .clientes-table th,
+  .clientes-table td {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Ocultamos algunas columnas si querés simplificar después */
+  .clientes-table th:nth-child(7),
+  .clientes-table td:nth-child(7),
+  .clientes-table th:nth-child(8),
+  .clientes-table td:nth-child(8) {
+    display: none;
+  }
+}

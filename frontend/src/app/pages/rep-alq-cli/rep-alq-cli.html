@@ -1,0 +1,43 @@
+<div class="clientes-crud container">
+    <h2>Reporte de Alquileres por Cliente</h2>
+    <label for="cliente">Cliente:</label>
+    <select id="cliente" [(ngModel)]="clienteId" (change)="onClienteChange()">
+        <option *ngFor="let c of listaClientes" [value]="c.id_cliente">
+            {{ c.nombre }}
+        </option>
+    </select>
+
+    <table class="clientes-table" *ngIf="alquileres && alquileres.length; else sinDatos">
+        <thead>
+            <tr>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Estado</th>
+                <th>Kilometraje inicial</th>
+                <th>Kilometraje final</th>
+                <th>Vehículo</th>
+                <th>Patente</th>
+                <th>Empleado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let a of alquileres">
+                <td>{{ a.fecha_inicio | date:'yyyy-MM-dd'}}</td>
+                <td>{{ a.fecha_fin | date:'yyyy-MM-dd'}}</td>
+                <td>{{ a.estado }}</td>
+                <td>{{ a.kilometraje_inicial }}</td>
+                <td>{{ a.kilometraje_final || '—' }}</td>
+                <td>{{ a.vehiculo.marca }} {{ a.vehiculo.modelo }}</td>
+                <td>{{ a.vehiculo.patente }}</td>
+                <td>{{ a.empleado.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #sinDatos>
+        <p *ngIf="clienteSeleccionado && (!alquileres || alquileres.length === 0)">
+            No se encontraron alquileres.
+        </p>
+    </ng-template>
+</div>
