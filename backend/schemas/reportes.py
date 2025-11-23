@@ -10,3 +10,8 @@ class VehiculoMasAlquilado(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+
+class FacturacionMensual(BaseModel):
+    mes: str      # "2025-11"
+    total: int    # suma de costo_total

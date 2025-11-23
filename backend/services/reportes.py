@@ -112,3 +112,50 @@ def alquileres_por_periodo(db: Session, tipo: str, anio: int, valor: int | None)
         "cantidad_alquileres": len(alquileres),
         "alquileres": [AlquilerClienteDetalle.model_validate(a) for a in alquileres]
     }
+
+
+
+# =======================================================
+# ESTADÍSTICA DE FACTURACIÓN MENSUAL (12 meses)
+# =======================================================
+def facturacion_mensual(db: Session):
+
+    hoy = datetime.now()
+    year = hoy.year
+    month = hoy.month
+
+    resultado = []
+
+    # Generar últimos 12 meses (del más reciente al más viejo)
+    for _ in range(12):
+
+        # Inicio del mes
+        inicio_mes = datetime(year, month, 1)
+
+        # Fin del mes
+        ultimo_dia = calendar.monthrange(year, month)[1]
+        fin_mes = datetime(year, month, ultimo_dia, 23, 59, 59)
+
+        # Sumar facturación del mes (considerar solo alquileres finalizados)
+        total_mes = (
+            db.query(func.sum(models.Alquiler.costo_total))
+            .filter(models.Alquiler.fecha_fin >= inicio_mes)
+            .filter(models.Alquiler.fecha_fin <= fin_mes)
+            .scalar()
+        )
+
+        if total_mes is None:
+            total_mes = 0
+
+        resultado.append({
+            "mes": f"{year:04d}-{month:02d}",
+            "total": total_mes
+        })
+
+        # Retroceder un mes
+        month -= 1
+        if month == 0:
+            month = 12
+            year -= 1
+
+    return resultado

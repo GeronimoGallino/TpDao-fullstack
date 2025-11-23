@@ -79,14 +79,20 @@ def crear_alquiler(datos: schemas.AlquilerCreate, db: Session):
     vehiculo = _validar_vehiculo_disponible(db, datos.id_vehiculo)
     _validar_empleado_activo(db, datos.id_empleado)
 
-    # Cambiar disponibilidad del vehículo → NOTA IMPORTANTE
+    # Desactivar vehículo mientras está alquilado
     _set_disponibilidad_vehiculo(db, vehiculo, False)
 
-    # Crear alquiler
-    nuevo_alquiler = models.Alquiler(**datos.model_dump())
-    db.add(nuevo_alquiler)
+    # Crear alquiler tomando el kilometraje desde el vehículo
+    nuevo_alquiler = models.Alquiler(
+        id_cliente=datos.id_cliente,
+        id_vehiculo=datos.id_vehiculo,
+        id_empleado=datos.id_empleado,
+        fecha_inicio=datetime.now(),
+        kilometraje_inicial=vehiculo.kilometraje,  
+        estado="activo"
+    )
 
-    # Guardar cambios
+    db.add(nuevo_alquiler)
     db.commit()
     db.refresh(nuevo_alquiler)
 

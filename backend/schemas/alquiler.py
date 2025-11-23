@@ -34,7 +34,7 @@ class AlquilerCreate(BaseModel):
     id_cliente: int
     id_vehiculo: int
     id_empleado: int
-    kilometraje_inicial: int
+    
 
 
 # ------------------------------

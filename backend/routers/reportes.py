@@ -46,3 +46,7 @@ def alquileres_por_periodo(
 ):
     resultado = reportes_service.alquileres_por_periodo(db, tipo, anio, valor)
     return resultado
+
+@router.get("/facturacion-mensual", response_model=list[schemas_reportes.FacturacionMensual])
+def obtener_facturacion_mensual(db: Session = Depends(get_db)):
+    return reportes_service.facturacion_mensual(db)
