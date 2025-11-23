@@ -11,6 +11,7 @@ class VehiculoBase(BaseModel):
     disponible: bool | None = True
     costo_diario: int
     estado: str | None = "activo"  # activo, mantenimiento, inactivo
+    plan_mantenimiento_id: int | None = None
 
 class VehiculoCreate(VehiculoBase):
     """Esquema usado para crear un nuevo vehículo."""
