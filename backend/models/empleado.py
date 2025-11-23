@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from backend.database import Base
+from sqlalchemy.orm import relationship
 
 
 class Empleado(Base):
@@ -15,3 +16,6 @@ class Empleado(Base):
     fecha_inicio = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     id_negocio = Column(Integer, nullable=False)
     estado = Column(Boolean, default=True)  # 👈 borrado lógico
+
+    mantenimientos = relationship("Mantenimiento", back_populates="empleado")
+

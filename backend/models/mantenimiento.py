@@ -16,4 +16,6 @@ class Mantenimiento(Base):
     observaciones = Column(String)
 
     vehiculo = relationship("Vehiculo", back_populates="mantenimientos")
+    empleado = relationship("Empleado", back_populates="mantenimientos")
 
+    
