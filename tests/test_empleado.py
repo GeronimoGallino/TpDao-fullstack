@@ -104,7 +104,7 @@ def test_obtener_empleado(client, db):
 def test_obtener_empleado_no_existente(client):
     response = client.get("/api/empleados/999")
     assert response.status_code == 404
-    assert response.json()["detail"] == "Empleado no encontrado o eliminado"
+    assert response.json()["detail"] == "Empleado no encontrado"
 
 
 def test_actualizar_empleado(client, db):

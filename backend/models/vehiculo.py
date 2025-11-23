@@ -16,3 +16,4 @@ class Vehiculo(Base):
     costo_diario = Column(Integer, nullable=False)
     estado = Column(String, default="activo")  # activo, mantenimiento, inactivo
     fecha_registro = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    

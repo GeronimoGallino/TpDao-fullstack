@@ -2,6 +2,8 @@ from pydantic import BaseModel, validator
 from datetime import datetime
 from typing import Optional
 
+from backend.schemas.empleado import EmpleadoSimple
+from backend.schemas.vehiculo import VehiculoSimple
 
 # ------------------------------
 #  Base: Campos compartidos
@@ -50,3 +52,21 @@ class Alquiler(AlquilerBase):
 
     class Config:
         from_attributes = True
+
+class AlquilerClienteDetalle(BaseModel):
+    fecha_inicio: datetime
+    fecha_fin: Optional[datetime]
+    costo_total: Optional[float] = None
+    estado: str
+    kilometraje_inicial: int
+    kilometraje_final: Optional[int]
+
+    vehiculo: VehiculoSimple
+    empleado: EmpleadoSimple
+
+    model_config = {
+        "from_attributes": True
+    }
+
+
+

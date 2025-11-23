@@ -24,3 +24,12 @@ class Vehiculo(VehiculoBase):
     model_config = {
         "from_attributes": True  # ✅ reemplaza orm_mode en Pydantic v2
     }
+
+class VehiculoSimple(BaseModel):
+    marca: str
+    modelo: str
+    patente: str
+
+    model_config = {
+        "from_attributes": True
+    }

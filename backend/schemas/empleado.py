@@ -25,3 +25,10 @@ class Empleado(EmpleadoBase):
     model_config = {
         "from_attributes": True
     }
+
+class EmpleadoSimple(BaseModel):
+    nombre: str
+
+    model_config = {
+        "from_attributes": True
+    }

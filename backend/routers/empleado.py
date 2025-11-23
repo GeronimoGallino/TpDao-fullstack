@@ -1,66 +1,45 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .. import models, database
-from ..schemas import empleado as schemas
+from backend import database
+from backend.schemas import empleado as schemas
+from backend.services import empleado as empleado_service
 
 router = APIRouter(prefix="/empleados", tags=["Empleados"])
 
 
 @router.post("/", response_model=schemas.Empleado)
 def crear_empleado(empleado: schemas.EmpleadoCreate, db: Session = Depends(database.get_db)):
-    nuevo_empleado = models.Empleado(**empleado.model_dump())
-    db.add(nuevo_empleado)
-    db.commit()
-    db.refresh(nuevo_empleado)
-    return nuevo_empleado
+    return empleado_service.crear_empleado(db, empleado)
 
 
 @router.get("/", response_model=list[schemas.Empleado])
 def listar_empleados(db: Session = Depends(database.get_db)):
-    return db.query(models.Empleado).filter(models.Empleado.estado == True).all()
+    return empleado_service.listar_empleados(db)
+
+@router.get("/filtrar", response_model=list[schemas.Empleado])
+def filtrar_empleados(
+    nombre: str | None = None,
+    dni: int | None = None,
+    cargo: str | None = None,
+    db: Session = Depends(database.get_db)
+):
+    return empleado_service.filtrar_empleados(db, nombre, dni, cargo)
 
 
 @router.get("/{empleado_id}", response_model=schemas.Empleado)
 def obtener_empleado(empleado_id: int, db: Session = Depends(database.get_db)):
-    empleado = db.query(models.Empleado).filter(
-        models.Empleado.id == empleado_id
-    ).first()
-
-    if not empleado:
-        raise HTTPException(status_code=404, detail="Empleado no encontrado o eliminado")
-
-    return empleado
+    return empleado_service.obtener_empleado(db, empleado_id)
 
 
 @router.put("/{empleado_id}", response_model=schemas.Empleado)
-def actualizar_empleado(empleado_id: int, datos: schemas.EmpleadoCreate, db: Session = Depends(database.get_db)):
-    empleado = db.query(models.Empleado).filter(
-        models.Empleado.id == empleado_id,
-        models.Empleado.estado == True
-    ).first()
-
-    if not empleado:
-        raise HTTPException(status_code=404, detail="Empleado no encontrado o eliminado")
-
-    for key, value in datos.model_dump().items():
-        setattr(empleado, key, value)
-
-    db.commit()
-    db.refresh(empleado)
-    return empleado
+def actualizar_empleado(
+    empleado_id: int,
+    datos: schemas.EmpleadoCreate,
+    db: Session = Depends(database.get_db),
+):
+    return empleado_service.actualizar_empleado(db, empleado_id, datos)
 
 
 @router.delete("/{empleado_id}")
 def eliminar_empleado(empleado_id: int, db: Session = Depends(database.get_db)):
-    empleado = db.query(models.Empleado).filter(
-        models.Empleado.id == empleado_id,
-        models.Empleado.estado == True
-    ).first()
-
-    if not empleado:
-        raise HTTPException(status_code=404, detail="Empleado no encontrado o ya eliminado")
-
-    empleado.estado = False  # 👈 borrado lógico
-    db.commit()
-
-    return {"mensaje": "Empleado eliminado (borrado lógico)"}
+    return empleado_service.eliminar_empleado(db, empleado_id)
