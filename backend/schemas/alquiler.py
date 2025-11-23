@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, validator
 from datetime import datetime
 from typing import Optional
 
@@ -19,7 +19,7 @@ class AlquilerBase(BaseModel):
     kilometraje_final: Optional[int] = None
     estado: Optional[str] = "activo"
 
-    @validator("fecha_fin")
+    @field_validator("fecha_fin", mode="after")
     def validar_fechas(cls, v, values):
         if v and "fecha_inicio" in values and values["fecha_inicio"]:
             if v < values["fecha_inicio"]:
@@ -50,8 +50,9 @@ class AlquilerFinalizar(BaseModel):
 class Alquiler(AlquilerBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = { 
+        "from_attributes": True 
+    }
 
 class AlquilerClienteDetalle(BaseModel):
     fecha_inicio: datetime
