@@ -3,7 +3,6 @@ from datetime import datetime
 
 class ClienteBase(BaseModel):
     nombre: str
-    apellido: str
     dni: str
     telefono: str | None = None
     email: str | None = None

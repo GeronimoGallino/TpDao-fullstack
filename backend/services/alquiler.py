@@ -189,20 +189,3 @@ def cancelar_alquiler(alquiler_id: int, db: Session):
     db.commit()
 
     return {"mensaje": "Alquiler cancelado"}
-
-
-# -------------------------------------------------------------------
-# ✔ Traer alquileres por cliente
-# -------------------------------------------------------------------
-
-def get_alquileres_por_cliente(db: Session, cliente_id: int):
-    alquileres = (
-        db.query(models.Alquiler)
-        .options(
-            joinedload(models.Alquiler.vehiculo),
-            joinedload(models.Alquiler.empleado)
-        )
-        .filter(models.Alquiler.id_cliente == cliente_id)
-        .all()
-    )
-    return alquileres
