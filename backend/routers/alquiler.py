@@ -28,11 +28,3 @@ def finalizar(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: Session = 
 def cancelar(alquiler_id: int, db: Session = Depends(database.get_db)):
     return alquiler_service.cancelar_alquiler(alquiler_id, db)
 
-@router.get("/cliente/{cliente_id}", response_model=list[schemas.AlquilerClienteDetalle])
-def obtener_alquileres_por_cliente(cliente_id: int, db: Session = Depends(database.get_db)):
-    result = alquiler_service.get_alquileres_por_cliente(db, cliente_id)
-
-    if not result:
-        raise HTTPException(404, "Este cliente no tiene alquileres")
-
-    return result

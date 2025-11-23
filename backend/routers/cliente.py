@@ -28,11 +28,10 @@ def listar_clientes(db: Session = Depends(database.get_db)):
 @router.get("/filtrar", response_model=list[schemas.Cliente])
 def filtrar_clientes(
     nombre: str | None = None,
-    apellido: str | None = None,
     dni: str | None = None,
     db: Session = Depends(database.get_db)
 ):
-    return cliente_service.filtrar_clientes(db, nombre, apellido, dni)
+    return cliente_service.filtrar_clientes(db, nombre, dni)
 
 
 

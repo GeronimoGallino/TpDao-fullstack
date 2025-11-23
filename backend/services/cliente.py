@@ -66,15 +66,12 @@ def eliminar_cliente(db: Session, cliente_id: int):
 # ---------------------------------------------------------
 # Filtrar clientes por nombre, apellido o DNI
 # ---------------------------------------------------------
-def filtrar_clientes(db: Session, nombre: str | None, apellido: str | None, dni: str | None):
+def filtrar_clientes(db: Session, nombre: str | None, dni: str | None):
 
     query = db.query(Cliente).filter(Cliente.estado == True)
 
     if nombre:
         query = query.filter(Cliente.nombre.ilike(f"%{nombre}%"))
-
-    if apellido:
-        query = query.filter(Cliente.apellido.ilike(f"%{apellido}%"))
 
     if dni:
         query = query.filter(Cliente.dni == dni)

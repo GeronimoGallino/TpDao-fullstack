@@ -16,7 +16,7 @@
 - HTML / CSS / JavaScript
 
 el backend se levanta con el comando: uvicorn backend.main:app --reload
-parado sobre TPDAO
+parado sobre la raiz del proyecto 
 
 
 Estructura de backend
@@ -27,6 +27,8 @@ backend/
  ├── schemas/
  │    └── cliente.py
  ├── models/
+ │    └── cliente.py
+ ├── services/
  │    └── cliente.py
  ├── database.py
  ├── main.py
