@@ -12,5 +12,5 @@ class Cliente(Base):
     telefono = Column(String)
     email = Column(String)
     direccion = Column(String)
-    fecha_registro = Column(DateTime)
+    fecha_registro = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     estado = Column(Boolean, default=True)

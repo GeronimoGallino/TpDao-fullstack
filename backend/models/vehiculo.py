@@ -1,8 +1,12 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timezone, timedelta
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from backend.database import Base  # 👈 correcto
 from .mantenimiento import Mantenimiento
+
+# CONFIGURACIÓN GLOBAL DEL SISTEMA
+INTERVALO_KM_DEFAULT = 10000
+INTERVALO_MESES_DEFAULT = 12
 
 class Vehiculo(Base):
     __tablename__ = "vehiculos"
@@ -23,15 +27,11 @@ class Vehiculo(Base):
         back_populates="vehiculo",
         cascade="all, delete-orphan"
     )
-    plan_mantenimiento_id = Column(Integer, ForeignKey("planes_mantenimiento.id"))
 
-    plan_mantenimiento = relationship("PlanMantenimiento")
 
     def __repr__(self):
         return f"<Vehiculo(id={self.id}, marca={self.marca}, modelo={self.modelo}, patente={self.patente})>"
     
-    def asignar_plan_mantenimiento(self, plan_mantenimiento):
-        self.plan_mantenimiento = plan_mantenimiento
 
     def validar_disponibilidad(self): #Buscar en alquileres activos (o activos a esa fecha) si el vehiculo está alquilado o no
         pass
@@ -43,26 +43,62 @@ class Vehiculo(Base):
         return self.mantenimientos
     
     def consultar_proximo_mantenimiento(self):
-        if not self.plan_mantenimiento:
-            raise ValueError("El vehículo no tiene un plan de mantenimiento asignado.")
-        
-        ultimo_mant = self.mantenimientos[-1] if self.mantenimientos else None
 
-        resultado = self.plan_mantenimiento.calcular_proximo_mantenimiento(
-            ultimo_km=ultimo_mant.km_actual if ultimo_mant else 0,
-            ultimo_fecha=ultimo_mant.fecha if ultimo_mant else self.fecha_registro,
-            fecha_actual=datetime.now(timezone.utc),
-            kilometraje_actual=self.kilometraje
-        )
+        """
+        Delegar el cálculo al último mantenimiento registrado.
+        Si no hay mantenimientos, usa los valores por defecto del vehículo.
+        """
 
-        print("Proximo mantenimiento calculado:", resultado["proximo_km"], resultado["proxima_fecha"], resultado["alerta_km"], resultado["alerta_fecha"])
+        fecha_actual = datetime.now(timezone.utc)
 
-        return {
-            "proximo_km": resultado["proximo_km"],
-            "proxima_fecha": resultado["proxima_fecha"],
-            "alerta_km": bool(resultado["alerta_km"]),
-            "alerta_fecha": bool(resultado["alerta_fecha"])
-        }
+        # ────────────────────────────────────────────────
+        # Caso 1: hay mantenimientos → usar el último
+        # ────────────────────────────────────────────────
+        if self.mantenimientos:
+            ultimo = self.mantenimientos[-1]
+
+            # Delegar cálculo al mantenimiento
+            return ultimo.calcular_proximo_mantenimiento(
+                kilometraje_actual=self.kilometraje,
+                fecha_actual=fecha_actual
+            )
+
+        # ────────────────────────────────────────────────
+        # Caso 2: no hay mantenimientos → calcular manualmente con defaults
+        # ────────────────────────────────────────────────
+        else:
+            # Daten por defecto
+            ultimo_km = 0
+            ultima_fecha = self.fecha_registro
+
+            # Asegurar tzinfo
+            if ultima_fecha.tzinfo is None:
+                ultima_fecha = ultima_fecha.replace(tzinfo=timezone.utc)
+
+            proximo_km = ultimo_km + INTERVALO_KM_DEFAULT
+
+            # Sumar meses correctamente usando la misma lógica que Mantenimiento usa
+            proxima_fecha = Mantenimiento._sumar_meses(
+                self,
+                fecha=ultima_fecha,
+                meses=INTERVALO_MESES_DEFAULT
+            )
+
+            # Calcular alertas con el mismo criterio
+            alerta_km, alerta_fecha = Mantenimiento._calcular_alertas(
+                self,
+                kilometraje_actual=self.kilometraje,
+                fecha_actual=fecha_actual,
+                proximo_km=proximo_km,
+                proxima_fecha=proxima_fecha
+            )
+
+            return {
+                "proximo_km": proximo_km,
+                "proxima_fecha": proxima_fecha,
+                "alerta_km": alerta_km,
+                "alerta_fecha": alerta_fecha
+            }
 
 
 

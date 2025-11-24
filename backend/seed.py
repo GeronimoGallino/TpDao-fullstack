@@ -54,29 +54,6 @@ def seed():
         for e in empleados:
             db.refresh(e)
 
-        # ---------------------------------------------
-        # 1) Crear Planes de Mantenimiento
-        # ---------------------------------------------
-        plan_auto = PlanMantenimiento(
-            tipo_vehiculo="auto",
-            km_intervalo=10000,
-            meses_intervalo=12
-        )
-
-        plan_pickup = PlanMantenimiento(
-            tipo_vehiculo="pickup",
-            km_intervalo=15000,
-            meses_intervalo=10
-        )
-
-        plan_moto = PlanMantenimiento(
-            tipo_vehiculo="moto",
-            km_intervalo=6000,
-            meses_intervalo=6
-        )
-
-        db.add_all([plan_auto, plan_pickup, plan_moto])
-        db.commit()
 
         # ---------------------------------------------
         # 2) Crear Vehículos
@@ -91,7 +68,6 @@ def seed():
                 kilometraje=45000,
                 disponible=True,
                 costo_diario=20000,
-                plan_mantenimiento_id=plan_auto.id
             ),
             Vehiculo(
                 marca="Ford",
@@ -102,7 +78,6 @@ def seed():
                 kilometraje=80000,
                 disponible=True,
                 costo_diario=30000,
-                plan_mantenimiento_id=plan_pickup.id
             ),
             Vehiculo(
                 marca="Yamaha",
@@ -113,7 +88,6 @@ def seed():
                 kilometraje=12000,
                 disponible=True,
                 costo_diario=10000,
-                plan_mantenimiento_id=plan_moto.id
             ),
             Vehiculo(
                 marca="Chevrolet",
@@ -124,7 +98,6 @@ def seed():
                 kilometraje=15000,
                 disponible=True,
                 costo_diario=18000,
-                plan_mantenimiento_id=plan_auto.id
             ),
             Vehiculo(
                 marca="Volkswagen",
@@ -136,7 +109,6 @@ def seed():
                 disponible=False,
                 costo_diario=32000,
                 estado="mantenimiento",
-                plan_mantenimiento_id=plan_pickup.id
             ),
         ]
 
@@ -159,7 +131,9 @@ def seed():
                 km_actual=40000,
                 tipo="preventivo",
                 costo=35000,
-                observaciones="Cambio de aceite y filtros"
+                observaciones="Cambio de aceite y filtros",
+                km_prox_mant=25000,
+                meses_prox_mant=12
             ),
             Mantenimiento(
                 id_vehiculo=vehiculos[1].id,
@@ -168,7 +142,9 @@ def seed():
                 km_actual=75000,
                 tipo="correctivo",
                 costo=80000,
-                observaciones="Cambio de correa de distribución"
+                observaciones="Cambio de correa de distribución",
+                km_prox_mant=10000,
+                meses_prox_mant=12
             ),
             Mantenimiento(
                 id_vehiculo=vehiculos[2].id,
@@ -177,7 +153,9 @@ def seed():
                 km_actual=12000,
                 tipo="preventivo",
                 costo=15000,
-                observaciones="Service general moto"
+                observaciones="Service general",
+                km_prox_mant=6000,
+                meses_prox_mant=6
             ),
         ]
 

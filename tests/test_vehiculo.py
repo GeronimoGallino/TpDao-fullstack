@@ -99,43 +99,6 @@ def crear_vehiculo_en_bd(db, marca="Ford", modelo="Focus", anio=2020, patente=No
         raise
 
 
-def crear_plan(
-    db,
-    tipo_vehiculo="auto",
-    km_intervalo=10000,
-    meses_intervalo=6,
-    **extra
-    ):
-    """
-    Crea un PlanMantenimiento válido según el modelo real.
-    Permite argumentos opcionales extra para flexibilidad en tests.
-    """
-
-    data = {
-        "tipo_vehiculo": tipo_vehiculo,
-        "km_intervalo": km_intervalo,
-        "meses_intervalo": meses_intervalo,
-    }
-
-    # Permite sobreescribir campos o agregar nuevos
-    data.update(extra)
-
-    plan = PlanMantenimiento(**data)
-
-    try:
-        db.add(plan)
-        db.commit()
-        db.refresh(plan)
-        return plan
-
-    except IntegrityError as ie:
-        db.rollback()
-        raise AssertionError(f"Error al crear PlanMantenimiento: {ie.orig}")
-
-    except Exception:
-        db.rollback()
-        raise
-
 
 from sqlalchemy.exc import IntegrityError
 
@@ -151,7 +114,9 @@ def crear_mantenimiento(db, vehiculo, fecha, km_actual, tipo="preventivo", costo
         "km_actual": km_actual,
         "tipo": tipo,
         "costo": costo,
-        "observaciones": observaciones
+        "observaciones": observaciones,
+        "km_prox_mant": 10000,
+        "meses_prox_mant": 12
     }
 
     mant = Mantenimiento(**data)
@@ -267,7 +232,7 @@ def test_listar_vehiculos_excluye_no_disponibles(client, db):
     v2.disponible = False
     db.commit()
 
-    response = client.get("/api/vehiculos/")
+    response = client.get("/api/vehiculos/activos")
     result = response.json()
 
     assert len(result) == 1
@@ -302,25 +267,10 @@ def test_historial_mantenimientos(db):
     assert historial[1].id == m2.id
 
 
-def test_asignar_plan_mantenimiento(db):
-    veh = crear_vehiculo_en_bd(db)
-    plan = crear_plan(db)
-    veh.asignar_plan_mantenimiento(plan)
-    db.commit()
-
-    assert veh.plan_mantenimiento_id == plan.id
-
-
-def test_consultar_proximo_mantenimiento_sin_plan(db):
-    veh = crear_vehiculo_en_bd(db)
-    with pytest.raises(ValueError):
-        veh.consultar_proximo_mantenimiento()
 
 
 def test_consultar_proximo_mantenimiento(db):
     veh = crear_vehiculo_en_bd(db, kilometraje=50000)
-    plan = crear_plan(db)
-    veh.asignar_plan_mantenimiento(plan)
     db.commit()
 
     fecha_mant = datetime(2024, 1, 1, tzinfo=timezone.utc)
@@ -329,17 +279,13 @@ def test_consultar_proximo_mantenimiento(db):
     resultado = veh.consultar_proximo_mantenimiento()
 
     assert resultado["proximo_km"] == 60000
-    assert resultado["proxima_fecha"].month == 7  # 6 meses después
+    assert resultado["proxima_fecha"].month == 1  # 12 meses después
     assert "alerta_km" in resultado
     assert "alerta_fecha" in resultado
 
 
 def test_alertas_desde_vehiculo(db):
     veh = crear_vehiculo_en_bd(db, kilometraje=59500)
-    plan = crear_plan(db)
-
-    veh.asignar_plan_mantenimiento(plan)
-    db.commit()
 
     crear_mantenimiento(
         db,

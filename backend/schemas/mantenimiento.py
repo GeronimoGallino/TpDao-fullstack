@@ -9,6 +9,9 @@ class MantenimientoBase(BaseModel):
     tipo: str  # preventivo, correctivo, etc.
     costo: int
     observaciones: str | None = None
+    km_prox_mant: int = 10000
+    meses_prox_mant: int = 12
+
 
 class MantenimientoCreate(MantenimientoBase):
     """Esquema usado para crear un nuevo mantenimiento."""

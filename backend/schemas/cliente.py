@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date, datetime
 
 class ClienteBase(BaseModel):
     nombre: str
@@ -7,6 +7,7 @@ class ClienteBase(BaseModel):
     telefono: str | None = None
     email: str | None = None
     direccion: str | None = None
+    fecha_registro: datetime | None = None
 
 
 class ClienteCreate(ClienteBase):
