@@ -6,4 +6,5 @@ from .vehiculo import Vehiculo
 from .alquiler import Alquiler
 from .plan_mantenimiento import PlanMantenimiento
 from .mantenimiento import Mantenimiento
+from .multa import Multa
 

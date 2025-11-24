@@ -28,3 +28,5 @@ class Alquiler(Base):
     cliente = relationship("Cliente")
     vehiculo = relationship("Vehiculo")
     empleado = relationship("Empleado")
+
+    multas = relationship("Multa", back_populates="alquiler")
