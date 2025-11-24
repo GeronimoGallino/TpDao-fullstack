@@ -8,7 +8,7 @@ import { ClientesService } from '../../core/services/clientes-service';
 import { EmpleadosService } from '../../core/services/empleados-service';
 import { VehiculosService } from '../../core/services/vehiculos-service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   standalone: true,
   templateUrl: './nuevo-alquiler.html',
   styleUrls: ['./nuevo-alquiler.css'],
-  imports: [CommonModule, FormsModule],   
+  imports: [CommonModule, FormsModule, NgIf, NgFor],   
   providers: [DatePipe]                 
 })
 export class NuevoAlquilerComponent implements OnInit {
