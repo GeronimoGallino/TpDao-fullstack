@@ -1,0 +1,62 @@
+<div class="login-container">
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate class="login-card">
+    <h2 class="login-title">Iniciar sesión</h2>
+    <label for="email" class="label">Correo electrónico</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      [(ngModel)]="model.email"
+      value="admin@test.com"
+      #email="ngModel"
+      required
+      email
+      autocomplete="username"
+      class="input"
+      aria-describedby="emailHelp"
+      [class.invalid]="email.invalid && (email.dirty || email.touched)"
+    />
+    <div id="emailHelp" class="error" *ngIf="email.invalid && (email.dirty || email.touched)">
+      <div *ngIf="email.errors?.['required']">El correo es obligatorio.</div>
+      <div *ngIf="email.errors?.['email']">Ingresa un correo válido.</div>
+    </div>
+    <label for="password" class="label">Contraseña</label>
+    <div class="password-wrapper">
+      <input
+        id="password"
+        name="password"
+        [type]="showPassword ? 'text' : 'password'"
+        [(ngModel)]="model.password"
+        value="123456"
+        #password="ngModel"
+        required
+        minlength="6"
+        autocomplete="current-password"
+        class="input"
+        [class.invalid]="password.invalid && (password.dirty || password.touched)"
+        aria-describedby="passwordHelp"
+      />
+      <button type="button" class="btn-icon" (click)="toggleShowPassword()" aria-label="Mostrar u ocultar contraseña">
+        {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+      </button>
+    </div>
+    <div id="passwordHelp" class="error" *ngIf="password.invalid && (password.dirty || password.touched)">
+      <div *ngIf="password.errors?.['required']">La contraseña es obligatoria.</div>
+      <div *ngIf="password.errors?.['minlength']">Mínimo 6 caracteres.</div>
+    </div>
+    <div *ngIf="errorMessage" class="error global-error" role="alert">
+      {{ errorMessage }}
+    </div>
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loginForm.invalid || loading"
+        aria-busy="{{loading}}"
+      >
+        <span *ngIf="!loading">Ingresar</span>
+        <span *ngIf="loading" class="spinner" aria-hidden="true"></span>
+      </button>
+    </div>
+  </form>
+</div>

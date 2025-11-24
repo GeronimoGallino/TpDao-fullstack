@@ -10,7 +10,10 @@ router = APIRouter(prefix="/alquileres", tags=["Alquileres"])
 
 @router.post("/", response_model=schemas.Alquiler)
 def crear_alquiler(alquiler: schemas.AlquilerCreate, db: Session = Depends(database.get_db)):
+    print("Payload recibido:", alquiler)  # <-- imprime el objeto Pydantic
+    print("Como dict:", alquiler.dict())  # <-- imprime como dict para ver valores exactos
     return alquiler_service.crear_alquiler(alquiler, db)
+
 
 @router.get("/", response_model=list[schemas.Alquiler])
 def listar(db: Session = Depends(database.get_db)):

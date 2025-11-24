@@ -32,10 +32,7 @@ export class AlquileresService {
       ...alquiler,
       id_cliente: Number(alquiler.id_cliente),
       id_vehiculo: Number(alquiler.id_vehiculo),
-      id_empleado: Number(alquiler.id_empleado),
-      fecha_inicio: alquiler.fecha_inicio instanceof Date 
-        ? alquiler.fecha_inicio.toISOString() 
-        : alquiler.fecha_inicio
+      id_empleado: Number(alquiler.id_empleado)
     };
     console.log('Payload para crear alquiler:', payload);
     console.log('paso por acaaaaaaaa');
@@ -71,12 +68,7 @@ export class AlquileresService {
   finalizar(alquiler: Alquiler): Observable<Alquiler> {
     const payload = {
       ...alquiler,
-      fecha_inicio: alquiler.fecha_inicio instanceof Date
-        ? alquiler.fecha_inicio.toISOString()
-        : alquiler.fecha_inicio,
-      fecha_fin: alquiler.fecha_fin instanceof Date 
-        ? alquiler.fecha_fin.toISOString()
-        : alquiler.fecha_fin
+      km_final: alquiler.kilometraje_final
     };
     return this.http.put<Alquiler>(`${this.baseUrl}/finalizar/${alquiler.id_alquiler}`, payload).pipe(
       map(a => ({

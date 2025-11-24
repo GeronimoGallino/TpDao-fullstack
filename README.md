@@ -11,8 +11,7 @@
 - SQLite
 
 ### 🔹 Frontend
-- React (con Vite o Create React App)
-- Axios
+- Angular 
 - HTML / CSS / JavaScript
 
 el backend se levanta con el comando: uvicorn backend.main:app --reload

@@ -75,27 +75,35 @@ def _set_disponibilidad_vehiculo(db: Session, vehiculo: models.Vehiculo, disponi
 
 def crear_alquiler(datos: schemas.AlquilerCreate, db: Session):
     # Validaciones
+    print("Validando cliente:", datos.id_cliente)
     _validar_cliente_activo(db, datos.id_cliente)
+
+    print("Validando vehículo:", datos.id_vehiculo)
     vehiculo = _validar_vehiculo_disponible(db, datos.id_vehiculo)
+    print("Vehículo OK:", vehiculo.id)
+
+    print("Validando empleado:", datos.id_empleado)
     _validar_empleado_activo(db, datos.id_empleado)
 
-    # Desactivar vehículo mientras está alquilado
+    print("Desactivando vehículo")
     _set_disponibilidad_vehiculo(db, vehiculo, False)
 
-    # Crear alquiler tomando el kilometraje desde el vehículo
+    print("Creando alquiler")
     nuevo_alquiler = models.Alquiler(
         id_cliente=datos.id_cliente,
         id_vehiculo=datos.id_vehiculo,
         id_empleado=datos.id_empleado,
         fecha_inicio=datetime.now(),
         kilometraje_inicial=vehiculo.kilometraje,  
-        estado="activo"
+        estado="Activo"
     )
-
     db.add(nuevo_alquiler)
-    db.commit()
-    db.refresh(nuevo_alquiler)
 
+    print("Commit...")
+    db.commit()
+    print("Refresh...")
+    db.refresh(nuevo_alquiler)
+    print("Alquiler creado:", nuevo_alquiler)
     return nuevo_alquiler
 
 
