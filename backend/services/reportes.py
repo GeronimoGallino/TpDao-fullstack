@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session, joinedload
 from fastapi import HTTPException
 from datetime import datetime
 import calendar
+from backend.services.strategies.periodos.calculator import PeriodoCalculator
 
 from .. import models
 from ..schemas.alquiler import AlquilerClienteDetalle
@@ -42,47 +43,47 @@ def get_vehiculos_mas_alquilados(db: Session, limite: int):
     return resultados
 
 
-# =======================================================
-# FUNCIÓN AUXILIAR - CALCULAR RANGO DEL PERIODO
-# =======================================================
-def _calcular_rango_periodo(tipo: str, anio: int, valor: int | None):
-    tipo = tipo.lower()
+# # =======================================================
+# # FUNCIÓN AUXILIAR - CALCULAR RANGO DEL PERIODO
+# # =======================================================
+# def _calcular_rango_periodo(tipo: str, anio: int, valor: int | None):
+#     tipo = tipo.lower()
 
-    if tipo == "anual":
-        fecha_inicio = datetime(anio, 1, 1)
-        fecha_fin = datetime(anio, 12, 31, 23, 59, 59)
+#     if tipo == "anual":
+#         fecha_inicio = datetime(anio, 1, 1)
+#         fecha_fin = datetime(anio, 12, 31, 23, 59, 59)
 
-    elif tipo == "mensual":
-        if valor is None:
-            raise HTTPException(400, "Debe especificar el mes (valor).")
+#     elif tipo == "mensual":
+#         if valor is None:
+#             raise HTTPException(400, "Debe especificar el mes (valor).")
 
-        if valor < 1 or valor > 12:
-            raise HTTPException(400, "El mes debe estar entre 1 y 12.")
+#         if valor < 1 or valor > 12:
+#             raise HTTPException(400, "El mes debe estar entre 1 y 12.")
 
-        ultimo_dia = calendar.monthrange(anio, valor)[1]
+#         ultimo_dia = calendar.monthrange(anio, valor)[1]
 
-        fecha_inicio = datetime(anio, valor, 1)
-        fecha_fin = datetime(anio, valor, ultimo_dia, 23, 59, 59)
+#         fecha_inicio = datetime(anio, valor, 1)
+#         fecha_fin = datetime(anio, valor, ultimo_dia, 23, 59, 59)
 
-    elif tipo == "trimestral":
-        if valor is None:
-            raise HTTPException(400, "Debe especificar el trimestre (valor).")
+#     elif tipo == "trimestral":
+#         if valor is None:
+#             raise HTTPException(400, "Debe especificar el trimestre (valor).")
 
-        if valor < 1 or valor > 4:
-            raise HTTPException(400, "El trimestre debe ser 1, 2, 3 o 4.")
+#         if valor < 1 or valor > 4:
+#             raise HTTPException(400, "El trimestre debe ser 1, 2, 3 o 4.")
 
-        mes_inicio = (valor - 1) * 3 + 1
-        mes_fin = mes_inicio + 2
+#         mes_inicio = (valor - 1) * 3 + 1
+#         mes_fin = mes_inicio + 2
 
-        ultimo_dia = calendar.monthrange(anio, mes_fin)[1]
+#         ultimo_dia = calendar.monthrange(anio, mes_fin)[1]
 
-        fecha_inicio = datetime(anio, mes_inicio, 1)
-        fecha_fin = datetime(anio, mes_fin, ultimo_dia, 23, 59, 59)
+#         fecha_inicio = datetime(anio, mes_inicio, 1)
+#         fecha_fin = datetime(anio, mes_fin, ultimo_dia, 23, 59, 59)
 
-    else:
-        raise HTTPException(400, "Tipo inválido. Use: mensual, trimestral o anual.")
+#     else:
+#         raise HTTPException(400, "Tipo inválido. Use: mensual, trimestral o anual.")
 
-    return fecha_inicio, fecha_fin
+#     return fecha_inicio, fecha_fin
 
 
 # =======================================================
@@ -90,8 +91,11 @@ def _calcular_rango_periodo(tipo: str, anio: int, valor: int | None):
 # =======================================================
 def alquileres_por_periodo(db: Session, tipo: str, anio: int, valor: int | None):
 
-    # 1️⃣ Calcular rango del período
-    fecha_inicio, fecha_fin = _calcular_rango_periodo(tipo, anio, valor)
+    # 1️⃣ Usamos el Strategy para seleccionar el método correcto
+    calculator = PeriodoCalculator()
+    strategy = calculator.obtener_strategy(tipo)
+
+    fecha_inicio, fecha_fin = strategy.calcular_rango(anio, valor)
 
     # 2️⃣ Traer alquileres dentro del periodo
     alquileres = (
@@ -107,12 +111,11 @@ def alquileres_por_periodo(db: Session, tipo: str, anio: int, valor: int | None)
         .all()
     )
 
-    # 3️⃣ Devolver formato final usando tu schema AlquilerClienteDetalle
+    # 3️⃣ Respuesta con tu schema AlquilerClienteDetalle
     return {
         "cantidad_alquileres": len(alquileres),
         "alquileres": [AlquilerClienteDetalle.model_validate(a) for a in alquileres]
     }
-
 
 
 # =======================================================
