@@ -148,6 +148,77 @@
   align-items: center;
 }
 
+.confirm-delete p {
+  margin: 0;
+  flex: 1;
+  color: #7f1d1d;
+  font-weight: 600;
+}
+
+.confirm-delete button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.confirm-delete button:first-of-type {
+  background: #fff;
+  background: var(--danger);
+  color: #374151;
+}
+
+.confirm-delete button:last-of-type {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: #374151;
+}
+
+
+.vehiculo-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: var(--pad);
+  border-radius: var(--radius);
+  margin-top: 12px;
+}
+
+.vehiculo-form h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.vehiculo-form form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.vehiculo-form label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.vehiculo-form input,
+.vehiculo-form textarea,
+.vehiculo-form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+
+.vehiculo-form input[type="date"] {
+  padding: 7px 10px;
+}
+
 @media (max-width: 1024px) {
   .vehiculos-table { font-size: 0.85rem; }
   .vehiculos-table th, .vehiculos-table td { padding: 6px 8px; }

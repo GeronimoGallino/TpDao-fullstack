@@ -1,1 +1,74 @@
-<p>rep-alq-per works!</p>
+<div class="reportes-crud container">
+    <h2>Reporte de Alquileres por Periodo</h2>
+
+    <div class="filtros">
+        <label for="tipo">Periodo:</label>
+        <select id="tipo" [(ngModel)]="tipo" (change)="onTipoChange()">
+            <option value="anual">Anual</option>
+            <option value="mensual">Mensual</option>
+            <option value="trimestral">Trimestral</option>
+        </select>
+
+        <label for="anio">Año:</label>
+        <select id="anio" [(ngModel)]="anio" (change)="onAnioChange()">
+            <option *ngFor="let y of anios" [value]="y">{{ y }}</option>
+        </select>
+        <!-- valor: mes (1-12) -->
+        <ng-container *ngIf="tipo === 'mensual'">
+            <label for="mes">Mes:</label>
+            <select id="mes" [(ngModel)]="valor" (change)="onValorChange()">
+                <option *ngFor="let m of meses" [value]="m.value">{{ m.label }}</option>
+            </select>
+        </ng-container>
+
+        <!-- valor: trimestre (1-4) -->
+        <ng-container *ngIf="tipo === 'trimestral'">
+            <label for="trimestre">Trimestre:</label>
+            <select id="trimestre" [(ngModel)]="valor" (change)="onValorChange()">
+                <option *ngFor="let t of trimestres" [value]="t.value">{{ t.label }}</option>
+            </select>
+        </ng-container>
+    </div>
+
+    <div class="resumen" *ngIf="respuesta">
+        <p><strong>Cantidad de alquileres:</strong> {{ respuesta.cantidad_alquileres }}</p>
+        <p><strong>Costo total (suma):</strong> {{ totalCosto | number:'1.0-2' }}</p>
+    </div>
+
+    <table class="reportes-table" *ngIf="respuesta && respuesta.alquileres?.length; else sinDatos">
+        <thead>
+            <tr>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th>
+                <th>Costo total</th>
+                <th>Estado</th>
+                <th>Kilometraje inicial</th>
+                <th>Kilometraje final</th>
+                <th>Vehículo</th>
+                <th>Patente</th>
+                <th>Empleado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let a of respuesta.alquileres">
+                <td>{{ a.fecha_inicio | date:'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ a.fecha_fin | date:'yyyy-MM-dd HH:mm' }}</td>
+                <td>{{ a.costo_total | number:'1.0-2' }}</td>
+                <td>{{ a.estado }}</td>
+                <td>{{ a.kilometraje_inicial }}</td>
+                <td>{{ a.kilometraje_final ?? '—' }}</td>
+                <td>{{ a.vehiculo?.marca }} {{ a.vehiculo?.modelo }}</td>
+                <td>{{ a.vehiculo?.patente }}</td>
+                <td>{{ a.empleado?.nombre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #sinDatos>
+        <p *ngIf="respuesta && (!respuesta.alquileres || respuesta.alquileres.length === 0)">
+            No se encontraron alquileres para el periodo seleccionado.
+        </p>
+    </ng-template>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+</div>

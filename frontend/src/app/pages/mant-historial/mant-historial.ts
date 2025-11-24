@@ -69,17 +69,21 @@ export class MantenimientosListComponent implements OnInit {
   applyFilter(): void {
     const q = this.filter.toLowerCase().trim();
 
+    let lista = this.mantenimientos.filter(m =>
+      m.fecha && new Date(m.fecha) < new Date()
+    );
+
+
     if (!q) {
-      this.mantenimientosFiltered = [...this.mantenimientos];
+      this.mantenimientosFiltered = lista;
       return;
     }
 
-    this.mantenimientosFiltered = this.mantenimientos.filter(m =>
+    this.mantenimientosFiltered = lista.filter(m =>
       (m.tipo || '').toLowerCase().includes(q) ||
       (m.observaciones || '').toLowerCase().includes(q) ||
       (m.id_empleado + '').includes(q) ||
       (m.id_vehiculo + '').includes(q)
     );
   }
-
 }

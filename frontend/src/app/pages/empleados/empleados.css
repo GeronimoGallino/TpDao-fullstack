@@ -214,8 +214,9 @@
 }
 
 .confirm-delete button:first-of-type {
+  background: #fff;
   background: var(--danger);
-  color: #fff;
+  color: #374151;
 }
 
 .confirm-delete button:last-of-type {

@@ -5,6 +5,7 @@ import { MantService } from '../../core/services/mant-service';
 import { Mantenimiento } from '../../core/interfaces/mantenimiento';
 import { Vehiculo } from '../../core/interfaces/vehiculo';
 import { VehiculosService } from '../../core/services/vehiculos-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mant-nuevo',
@@ -37,7 +38,8 @@ export class MantenimientosComponent {
   };
 
   constructor(private mantService: MantService,
-    private vehiculosService: VehiculosService) { }
+    private vehiculosService: VehiculosService,
+    private router: Router) { }
 
   loadVehiculos(): void {
     this.vehiculosService.getAllActive().subscribe({ next: list => this.vehiculos = list || [], error: err => console.error(err) });
@@ -63,6 +65,9 @@ export class MantenimientosComponent {
           vehiculo: undefined
         };
 
+        alert('Mantenimiento creado con éxito!');
+        
+        this.router.navigate(['/home']);
         this.loading = false;
       },
       error: (err) => {

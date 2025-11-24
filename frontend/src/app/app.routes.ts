@@ -13,6 +13,7 @@ import { Home } from './core/components/home/home';
 import { AuthGuard } from './core/services/authguard';
 import { MantenimientosComponent } from './pages/mant-nuevo/mant-nuevo';
 import { MantenimientosListComponent } from './pages/mant-historial/mant-historial';
+import { MantenimientosPendComponent } from './pages/mant-pendiente/mant-pendiente';
 
 export const routes: Routes = [
     {
@@ -60,6 +61,11 @@ export const routes: Routes = [
     {
         path: 'mantenimientos/historial',
         component: MantenimientosListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'mantenimientos/pendientes',
+        component: MantenimientosPendComponent,
         canActivate: [AuthGuard]
     },
     {
