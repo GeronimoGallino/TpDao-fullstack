@@ -51,7 +51,7 @@ def _validar_empleado_activo(db: Session, id_empleado: int):
 def _obtener_alquiler_activo(db: Session, alquiler_id: int):
     alquiler = db.query(models.Alquiler).filter(
         models.Alquiler.id == alquiler_id,
-        models.Alquiler.estado == "activo"
+        models.Alquiler.estado == "Activo"
     ).first()
 
     if not alquiler:
@@ -165,7 +165,11 @@ def finalizar_alquiler(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: S
     if vehiculo.costo_diario is None:
         raise HTTPException(status_code=500, detail="El vehículo no tiene costo_diario definido")
 
+
+
     costo_total = dias * vehiculo.costo_diario
+    total_multas = sum(m.costo for m in alquiler.multas)
+    costo_total += total_multas
 
     # 7) Actualizar alquiler
     alquiler.fecha_fin = fecha_fin
