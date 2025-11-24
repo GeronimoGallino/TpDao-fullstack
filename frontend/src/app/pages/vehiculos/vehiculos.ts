@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Vehiculo } from '../../core/interfaces/vehiculo';
 import { VehiculosService } from '../../core/services/vehiculos-service';
@@ -9,7 +9,7 @@ import { VehiculosService } from '../../core/services/vehiculos-service';
   templateUrl: './vehiculos.html',
   styleUrls: ['./vehiculos.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule]  
+  imports: [CommonModule, FormsModule, NgIf, NgFor]  
 })
 export class VehiculosComponent implements OnInit {
   vehiculos: Vehiculo[] = [];
