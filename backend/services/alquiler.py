@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from datetime import datetime, timezone
@@ -51,11 +52,11 @@ def _validar_empleado_activo(db: Session, id_empleado: int):
 def _obtener_alquiler_activo(db: Session, alquiler_id: int):
     alquiler = db.query(models.Alquiler).filter(
         models.Alquiler.id == alquiler_id,
-        models.Alquiler.estado == "activo"
+        models.Alquiler.estado == "Activo" 
     ).first()
 
     if not alquiler:
-        raise HTTPException(status_code=404, detail="Alquiler no encontrado o ya finalizado/cancelado")
+        raise HTTPException(status_code=404, detail="Alquiler no encontrado o ya cancelado")
 
     return alquiler
 
@@ -113,7 +114,10 @@ def crear_alquiler(datos: schemas.AlquilerCreate, db: Session):
 
 def listar_activos(db: Session):
     return db.query(models.Alquiler).filter(
-        models.Alquiler.estado == "Activo"
+        or_(
+            models.Alquiler.estado == "Activo",
+            models.Alquiler.estado == "Finalizado"
+        )
     ).all()
 
 
@@ -136,7 +140,11 @@ def obtener_alquiler(alquiler_id: int, db: Session):
 
 def finalizar_alquiler(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: Session):
     # 1) Obtener alquiler activo
+    print(alquiler_id)
+
     alquiler = _obtener_alquiler_activo(db, alquiler_id)
+
+    print(alquiler_id, alquiler, datos)
 
     # 2) Fecha fin UTC
     fecha_fin = datetime.now(timezone.utc)
@@ -171,7 +179,7 @@ def finalizar_alquiler(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: S
     alquiler.fecha_fin = fecha_fin
     alquiler.kilometraje_final = datos.kilometraje_final
     alquiler.costo_total = costo_total
-    alquiler.estado = "finalizado"
+    alquiler.estado = "Finalizado"
 
     # 8) Liberar vehículo (disponible = True)
     _set_disponibilidad_vehiculo(db, vehiculo, True)
@@ -190,7 +198,7 @@ def finalizar_alquiler(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: S
 def cancelar_alquiler(alquiler_id: int, db: Session):
     alquiler = _obtener_alquiler_activo(db, alquiler_id)
 
-    alquiler.estado = "cancelado"
+    alquiler.estado = "Cancelado"
 
     # Hacemos el vehículo disponible nuevamente
     vehiculo = db.query(models.Vehiculo).filter(

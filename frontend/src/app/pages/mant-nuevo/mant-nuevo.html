@@ -1,0 +1,51 @@
+<div class="mantenimiento-container container">
+
+    <h2>Registrar Mantenimiento</h2>
+
+    <form #mantenimientoForm="ngForm" (ngSubmit)="crearMantenimiento()" class="mantenimiento-form">
+
+        <div>
+
+            <label>Vehículo</label>
+            <select name="id_vehiculo" required [(ngModel)]="mantenimiento.id_vehiculo">
+                <option value="">Seleccionar vehículo</option>
+                <option *ngFor="let v of vehiculos" [value]="v.id">{{ v.marca }} {{ v.modelo }} ({{ v.patente }})
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label>Fecha</label>
+            <input type="date" name="fecha" required [(ngModel)]="mantenimiento.fecha" />
+        </div>
+
+        <div>
+            <label>Kilometraje actual</label>
+            <input type="number" name="km_actual" required [(ngModel)]="mantenimiento.km_actual" />
+        </div>
+
+        <div>
+            <label>Tipo</label>
+            <select name="tipo" required [(ngModel)]="mantenimiento.tipo">
+                <option value="preventivo">Preventivo</option>
+                <option value="correctivo">Correctivo</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Costo</label>
+            <input type="number" step="0.01" name="costo" required [(ngModel)]="mantenimiento.costo" />
+        </div>
+
+        <div>
+            <label>Observaciones</label>
+            <textarea name="observaciones" [(ngModel)]="mantenimiento.observaciones"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" [disabled]="mantenimientoForm.invalid">Crear</button>
+        </div>
+
+    </form>
+
+</div>

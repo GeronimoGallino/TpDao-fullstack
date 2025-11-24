@@ -1,1 +1,49 @@
-<p>mant-historial works!</p>
+<div class="alquileres-crud container">
+  
+  <h2>Gestión de Mantenimientos</h2>
+
+  <div class="actions">
+    <input 
+      type="text" 
+      placeholder="Buscar por vehículo, tipo o empleado..."
+      [(ngModel)]="filter"
+      (ngModelChange)="applyFilter()"
+    />
+  </div>
+
+  <table class="alquileres-table" *ngIf="mantenimientosFiltered.length; else emptyList">
+    <thead>
+      <tr>
+        <th>Vehículo</th>
+        <th>Empleado</th>
+        <th>Fecha</th>
+        <th>Km Actual</th>
+        <th>Tipo</th>
+        <th>Costo</th>
+        <th>Obs.</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let m of mantenimientosFiltered">
+        <td>{{ (getVehiculo(m.id_vehiculo ?? 0 )?.marca ) }} {{ getVehiculo(m.id_vehiculo ?? 0 )?.modelo }}</td>
+        <td>{{ getEmpleado(m.id_empleado ?? 0)?.nombre }}</td>
+        <td>{{ m.fecha | date:'shortDate' }}</td>
+        <td>{{ m.km_actual }}</td>
+        <td>
+          <span class="badge" 
+                [ngClass]="m.tipo === 'preventivo' ? 'activo' : 'completado'">
+            {{ m.tipo }}
+          </span>
+        </td>
+        <td>${{ m.costo }}</td>
+        <td>{{ m.observaciones }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay mantenimientos registrados.</p>
+  </ng-template>
+
+</div>

@@ -11,6 +11,8 @@ import { RepFacMen } from './pages/rep-fac-men/rep-fac-men';
 import { Login } from './core/components/login/login';
 import { Home } from './core/components/home/home';
 import { AuthGuard } from './core/services/authguard';
+import { MantenimientosComponent } from './pages/mant-nuevo/mant-nuevo';
+import { MantenimientosListComponent } from './pages/mant-historial/mant-historial';
 
 export const routes: Routes = [
     {
@@ -51,6 +53,16 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'mantenimientos/nuevo',
+        component: MantenimientosComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'mantenimientos/historial',
+        component: MantenimientosListComponent,
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'reportes/alquileres',
         component: RepAlqCli,
         canActivate: [AuthGuard]
@@ -70,7 +82,6 @@ export const routes: Routes = [
         component: RepFacMen,
         canActivate: [AuthGuard]
     },
-
     {
         path: 'login',
         component: Login

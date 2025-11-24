@@ -56,7 +56,7 @@ export class AlquileresService {
         ? alquiler.fecha_fin.toISOString()
         : alquiler.fecha_fin
     };
-    return this.http.put<Alquiler>(`${this.baseUrl}/${alquiler.id_alquiler}`, payload).pipe(
+    return this.http.put<Alquiler>(`${this.baseUrl}/${alquiler.id}`, payload).pipe(
       map(a => ({
         ...a,
         fecha_inicio: a?.fecha_inicio ? new Date(a.fecha_inicio as any) : new Date(),
@@ -67,10 +67,11 @@ export class AlquileresService {
 
   finalizar(alquiler: Alquiler): Observable<Alquiler> {
     const payload = {
-      ...alquiler,
-      km_final: alquiler.kilometraje_final
+      kilometraje_final: alquiler.kilometraje_final
     };
-    return this.http.put<Alquiler>(`${this.baseUrl}/finalizar/${alquiler.id_alquiler}`, payload).pipe(
+    console.log('el id que se quiere mandar es', alquiler.id);
+    console.log('el payload que se quiere mandar es', payload);
+    return this.http.put<Alquiler>(`${this.baseUrl}/finalizar/${alquiler.id}`, payload).pipe(
       map(a => ({
         ...a,
         kilometraje_fin: a.kilometraje_final

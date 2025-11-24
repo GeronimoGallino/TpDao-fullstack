@@ -25,6 +25,7 @@ def obtener(alquiler_id: int, db: Session = Depends(database.get_db)):
 
 @router.put("/finalizar/{alquiler_id}", response_model=schemas.Alquiler)
 def finalizar(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: Session = Depends(database.get_db)):
+    print('llega al router', alquiler_id, datos)
     return alquiler_service.finalizar_alquiler(alquiler_id, datos, db)
 
 @router.delete("/{alquiler_id}")

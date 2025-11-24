@@ -3,7 +3,7 @@ import { Empleado } from "./empleado";
 import { Vehiculo } from "./vehiculo";
 
 export interface Alquiler {
-    id_alquiler: number;
+    id: number;
     id_cliente: number;
     cliente: Cliente; // asigno
     id_vehiculo: number;

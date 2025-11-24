@@ -297,9 +297,9 @@ export class AlquileresComponent implements OnInit {
       return;
     }
     this.alquileresFiltered = this.alquileres.filter(a =>
-      (a.cliente?.nombre || '').toLowerCase().includes(q) ||
-      (a.vehiculo?.marca || '').toLowerCase().includes(q) ||
-      (a.vehiculo?.modelo || '').toLowerCase().includes(q) ||
+      (this.getCliente(a.id_cliente)?.nombre || '').toLowerCase().includes(q) ||
+      (this.getVehiculo(a.id_vehiculo)?.marca || '').toLowerCase().includes(q) ||
+      (this.getVehiculo(a.id_vehiculo)?.modelo || '').toLowerCase().includes(q) ||
       (a.estado || '').toLowerCase().includes(q)
     );
   }
@@ -308,7 +308,7 @@ export class AlquileresComponent implements OnInit {
 
   newAlquiler(): void {
     this.selectedAlquiler = {
-      id_alquiler: 0,
+      id: 0,
       id_cliente: 0,
       cliente: null as any,
       id_vehiculo: 0,
@@ -358,7 +358,7 @@ export class AlquileresComponent implements OnInit {
   deleteAlquiler(a?: Alquiler): void {
     const target = a ?? this.toDeleteAlquiler;
     if (!target) return;
-    this.alquileresService.delete(target.id_alquiler).subscribe({
+    this.alquileresService.delete(target.id).subscribe({
       next: () => { this.toDeleteAlquiler = null; this.loadAlquileres(); },
       error: err => console.error('Error eliminando alquiler', err)
     });

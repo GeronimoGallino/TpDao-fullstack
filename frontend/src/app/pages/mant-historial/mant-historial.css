@@ -1,0 +1,91 @@
+:root {
+  --bg: #f7fafc;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+  --radius: 8px;
+  --gap: 12px;
+  --pad: 16px;
+}
+
+.alquileres-crud {
+  background: var(--bg);
+  padding: calc(var(--pad) * 1.25);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  color: #111827;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  max-width: 1300px;
+  margin: 20px auto;
+}
+
+.alquileres-crud h2 { 
+  margin: 0 0 20px 0; 
+  font-size: 1.4rem; 
+  font-weight: 600; 
+}
+
+.actions {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.actions input[type="text"] {
+  flex: 1 1 240px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  outline: none;
+}
+
+.alquileres-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+}
+
+.alquileres-table thead { background: #f3f4f6; }
+
+.alquileres-table th, 
+.alquileres-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.alquileres-table tbody tr:nth-child(even) { background: #fbfdff; }
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge.activo { background: #fef3c7; color: #92400e; }
+.badge.completado { background: #d1fae5; color: #065f46; }
+.badge.cancelado { background: #fee2e2; color: #991b1b; }
+
+@media (max-width: 1024px) {
+  .alquileres-table { font-size: 0.8rem; }
+  .alquileres-table th, .alquileres-table td { padding: 6px 8px; }
+}
+
+@media (max-width: 760px) {
+  .alquileres-table th:nth-child(1), .alquileres-table td:nth-child(1) { display: none; }
+  .alquileres-table th:nth-child(4), .alquileres-table td:nth-child(4) { display: none; }
+  .alquileres-table th:nth-child(7), .alquileres-table td:nth-child(7) { display: none; }
+  .actions { flex-direction: column; align-items: stretch; }
+}

@@ -70,7 +70,7 @@ export class NuevoAlquilerComponent implements OnInit {
 
   newAlquiler(): void {
     this.selectedAlquiler = {
-      id_alquiler: 0,
+      id: 0,
       id_cliente: 0,
       cliente: null as any,
       id_vehiculo: 0,
