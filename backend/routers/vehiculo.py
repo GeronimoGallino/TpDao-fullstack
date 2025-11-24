@@ -10,9 +10,13 @@ router = APIRouter(prefix="/vehiculos", tags=["Vehículos"])
 def crear_vehiculo(vehiculo: schemas.VehiculoCreate, db: Session = Depends(database.get_db)):
     return vehiculo_service.crear_vehiculo(db, vehiculo)
 
-@router.get("/", response_model=list[schemas.Vehiculo])
+@router.get("/activos", response_model=list[schemas.Vehiculo])
 def listar_vehiculos(db: Session = Depends(database.get_db)):
     return vehiculo_service.listar_vehiculos(db)
+
+@router.get("/", response_model=list[schemas.Vehiculo])
+def listar_vehiculos(db: Session = Depends(database.get_db)):
+    return vehiculo_service.listar_todos_vehiculos(db)
 
 @router.get("/filtrar", response_model=list[schemas.Vehiculo])
 def filtrar_vehiculos(

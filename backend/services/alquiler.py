@@ -105,7 +105,7 @@ def crear_alquiler(datos: schemas.AlquilerCreate, db: Session):
 
 def listar_activos(db: Session):
     return db.query(models.Alquiler).filter(
-        models.Alquiler.estado == "activo"
+        models.Alquiler.estado == "Activo"
     ).all()
 
 

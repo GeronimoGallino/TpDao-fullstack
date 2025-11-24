@@ -17,7 +17,9 @@ def obtener_alquileres_por_cliente(cliente_id: int, db: Session = Depends(databa
     result = reportes_service.get_alquileres_por_cliente(db, cliente_id)
 
     if not result:
+        print("No se encontraron alquileres para el cliente con ID:", cliente_id)
         raise HTTPException(404, "Este cliente no tiene alquileres")
+    
 
     return result
 

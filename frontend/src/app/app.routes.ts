@@ -6,6 +6,8 @@ import { NuevoAlquilerComponent } from './pages/nuevo-alquiler/nuevo-alquiler';
 import { AlquileresComponent } from './pages/alquileres/alquileres';
 import { RepAlqCli } from './pages/rep-alq-cli/rep-alq-cli';
 import { RepTopAlq } from './pages/rep-top-alq/rep-top-alq';
+import { RepAlqPer } from './pages/rep-alq-per/rep-alq-per';
+import { RepFacMen } from './pages/rep-fac-men/rep-fac-men';
 
 export const routes: Routes = [
     {
@@ -35,5 +37,13 @@ export const routes: Routes = [
     {
         path: "reportes/vehiculos",
         component: RepTopAlq
+    },
+    {
+        path: "reportes/periodo",
+        component: RepAlqPer
+    },
+    {
+        path: "reportes/facturacion",
+        component: RepFacMen
     }
 ];

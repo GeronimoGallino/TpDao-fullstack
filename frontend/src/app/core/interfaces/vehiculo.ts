@@ -1,5 +1,5 @@
 export interface Vehiculo {
-    id_vehiculo: number;
+    id: number;
     marca: string;
     modelo: string;
     anio: number;

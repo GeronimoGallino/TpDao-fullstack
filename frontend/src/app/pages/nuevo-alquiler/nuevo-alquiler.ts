@@ -15,19 +15,16 @@ import { CommonModule, DatePipe } from '@angular/common';
   standalone: true,
   templateUrl: './nuevo-alquiler.html',
   styleUrls: ['./nuevo-alquiler.css'],
-  imports: [CommonModule, FormsModule],   // DatePipe NO va en imports
-  providers: [DatePipe]                  // si necesitas DatePipe, púeselo aquí
+  imports: [CommonModule, FormsModule],   
+  providers: [DatePipe]                 
 })
 export class NuevoAlquilerComponent implements OnInit {
   datosCorrectos() {
     if (!this.selectedAlquiler) return false;
+    console.log('Validando datos del alquiler:', this.selectedAlquiler, this.selectedAlquiler.id_cliente > 0, this.selectedAlquiler.id_vehiculo > 0);
     return this.selectedAlquiler.id_cliente > 0 &&
-      this.selectedAlquiler.id_vehiculo > 0 &&
-      this.selectedAlquiler.id_empleado > 0 &&
-      (this.selectedAlquiler.fecha_inicio instanceof Date || !!this.selectedAlquiler.fecha_inicio) &&
-      (this.selectedAlquiler.fecha_fin instanceof Date || !!this.selectedAlquiler.fecha_fin) &&
-      new Date(this.selectedAlquiler.fecha_fin) >= new Date(this.selectedAlquiler.fecha_inicio) &&
-      this.selectedAlquiler.kilometraje_inicio >= 0
+      this.selectedAlquiler.id_vehiculo > 0 // &&
+      // this.selectedAlquiler.id_empleado > 0
   }
 
   alquileres: Alquiler[] = [];
@@ -65,8 +62,9 @@ export class NuevoAlquilerComponent implements OnInit {
   }
 
   loadVehiculos(): void {
-    this.vehiculosService.getAll().subscribe({ next: list => this.vehiculos = list || [], error: err => console.error(err) });
+    this.vehiculosService.getAllActive().subscribe({ next: list => this.vehiculos = list || [], error: err => console.error(err) });
   }
+
 
   newAlquiler(): void {
     this.selectedAlquiler = {
@@ -75,13 +73,13 @@ export class NuevoAlquilerComponent implements OnInit {
       cliente: null as any,
       id_vehiculo: 0,
       vehiculo: null as any,
-      id_empleado: 0,
+      id_empleado: 1, // cambiar despues cuando usemos sesionessssssss -----------------------------------
       empleado: null as any,
-      fecha_inicio: new Date(),
-      fecha_fin: new Date(),
+      fecha_inicio: undefined,
+      fecha_fin: undefined,
       costo_total: 0,
-      kilometraje_inicio: 0,
-      kilometraje_fin: 0,
+      kilometraje_inicial: 0,
+      kilometraje_final: 0,
       estado: 'activo'
     };
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
@@ -93,13 +91,9 @@ export class NuevoAlquilerComponent implements OnInit {
     console.log('Guardando alquiler:', this.selectedAlquiler);
 
     const payload = {
-      ...this.selectedAlquiler,
-      fecha_inicio: this.selectedAlquiler.fecha_inicio instanceof Date
-        ? this.selectedAlquiler.fecha_inicio.toISOString()
-        : this.selectedAlquiler.fecha_inicio,
-      fecha_fin: this.selectedAlquiler.fecha_fin instanceof Date
-        ? this.selectedAlquiler.fecha_fin.toISOString()
-        : this.selectedAlquiler.fecha_fin
+      id_cliente: Number(this.selectedAlquiler.id_cliente),
+      id_vehiculo: Number(this.selectedAlquiler.id_vehiculo),
+      id_empleado: 1 // cambiar despues cuando usemos sesionessssssss -----------------------------------
     };
 
     this.alquileresService.create(payload as any).subscribe({

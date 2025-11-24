@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, validator
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 from typing import Optional
 
@@ -20,10 +20,10 @@ class AlquilerBase(BaseModel):
     estado: Optional[str] = "activo"
 
     @field_validator("fecha_fin", mode="after")
-    def validar_fechas(cls, v, values):
-        if v and "fecha_inicio" in values and values["fecha_inicio"]:
-            if v < values["fecha_inicio"]:
-                raise ValueError("fecha_fin debe ser posterior a fecha_inicio")
+    def validar_fechas(cls, v, info):
+        fecha_inicio = info.data.get("fecha_inicio")
+        if v and fecha_inicio and v < fecha_inicio:
+            raise ValueError("fecha_fin debe ser posterior a fecha_inicio")
         return v
 
 
@@ -35,7 +35,6 @@ class AlquilerCreate(BaseModel):
     id_vehiculo: int
     id_empleado: int
     
-
 
 # ------------------------------
 #  Finalizar alquiler (solo lo necesario)
@@ -68,6 +67,3 @@ class AlquilerClienteDetalle(BaseModel):
     model_config = {
         "from_attributes": True
     }
-
-
-

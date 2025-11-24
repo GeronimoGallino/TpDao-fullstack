@@ -67,7 +67,7 @@ export class VehiculosComponent implements OnInit {
 
   newVehiculo(): void {
     this.selectedVehiculo = {
-      id_vehiculo: 0,
+      id: 0,
       marca: '',
       modelo: '',
       anio: new Date().getFullYear(),
@@ -111,7 +111,7 @@ export class VehiculosComponent implements OnInit {
   deleteVehiculo(v?: Vehiculo): void {
     const target = v ?? this.toDeleteVehiculo;
     if (!target) return;
-    this.vehiculosService.delete(target.id_vehiculo).subscribe({
+    this.vehiculosService.delete(target.id).subscribe({
       next: () => { this.toDeleteVehiculo = null; this.loadVehiculos(); },
       error: err => console.error('Error eliminando vehículo', err)
     });

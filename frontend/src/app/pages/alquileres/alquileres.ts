@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Alquiler } from '../../core/interfaces/alquiler';
 import { Cliente } from '../../core/interfaces/cliente';
 import { Empleado } from '../../core/interfaces/empleado';
@@ -9,6 +9,7 @@ import { EmpleadosService } from '../../core/services/empleados-service';
 import { VehiculosService } from '../../core/services/vehiculos-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-alquileres',
@@ -18,7 +19,7 @@ import { CommonModule, DatePipe } from '@angular/common';
   imports: [FormsModule, DatePipe, CommonModule]
 })
 export class AlquileresComponent implements OnInit {
-  
+
   alquileres: Alquiler[] = [];
   alquileresFiltered: Alquiler[] = [];
   filter = '';
@@ -44,27 +45,57 @@ export class AlquileresComponent implements OnInit {
   private drawing = false;
 
   @ViewChild('contratoCard') contratoCard!: ElementRef<HTMLDivElement>;
-  @ViewChild('firmaCanvas') firmaCanvas!: ElementRef<HTMLCanvasElement>; // Este se mantiene
+  @ViewChild('firmaCanvas') firmaCanvas!: ElementRef<HTMLCanvasElement>; // Este se mantiene
 
   constructor(
     private alquileresService: AlquileresService,
     private clientesService: ClientesService,
     private empleadosService: EmpleadosService,
     private vehiculosService: VehiculosService,
-  ) {}
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
-    /* tus datos mock */
-    this.alquileres = [
-      /* ... (tu lista completa inicial, lo dejo igual que la tenés) ... */
-    ];
+  this.loading = true;
+  forkJoin({
+    alquileres: this.alquileresService.getAll(),
+    clientes: this.clientesService.getAll(),
+    empleados: this.empleadosService.getAll(),
+    vehiculos: this.vehiculosService.getAll()
+  }).subscribe({
+    next: ({ alquileres, clientes, empleados, vehiculos }) => {
+      this.alquileres = (alquileres || []).map(a => ({
+        ...a,
+        fecha_inicio: a.fecha_inicio ? new Date(a.fecha_inicio as any) : new Date()
+      }));
+      this.clientes = clientes || [];
+      this.empleados = empleados || [];
+      this.vehiculos = vehiculos || [];
+      this.applyFilter();
+      this.loading = false;
+      this.cdr.markForCheck();
+    },
+    error: err => {
+      console.error('Error cargando datos', err);
+      this.loading = false;
+      this.cdr.markForCheck();
+    }
+  });
+}
 
-    this.applyFilter();
-    this.loadAlquileres();
-    this.loadClientes();
-    this.loadEmpleados();
-    this.loadVehiculos();
+
+  getEmpleado(id_empleado: number): Empleado | null {
+    return this.empleados.find(e => e.id === id_empleado) || null;
   }
+
+  getCliente(id_cliente: number): Cliente | null {
+    return this.clientes.find(c => c.id_cliente === id_cliente) || null;
+  }
+
+  getVehiculo(id_vehiculo: number): Vehiculo | null {
+    return this.vehiculos.find(v => v.id === id_vehiculo) || null;
+  }
+
 
   verContrato(a: Alquiler): void {
     this.alquilerContrato = a;
@@ -75,7 +106,7 @@ export class AlquileresComponent implements OnInit {
     setTimeout(() => this.initCanvas(), 50);
   }
 
-  finalizarContrato(a: Alquiler):void {
+  finalizarContrato(a: Alquiler): void {
     this.finalizarVisible = true;
     this.contratoVisible = false;
     this.alquilerFinalizar = a;
@@ -129,28 +160,28 @@ export class AlquileresComponent implements OnInit {
 
     // 2. Clonar el contenido de la tarjeta del contrato (para no modificar el original visible)
     const printContent = this.contratoCard.nativeElement.cloneNode(true) as HTMLDivElement;
-    
+
     // 3. Eliminar los botones y elementos de control del modal para que no aparezcan en la impresión
     printContent.querySelector('.cerrar')?.remove();
     printContent.querySelector('button:last-child')?.remove(); // El botón de "Descargar"
-    
+
     // 4. Obtener la imagen Base64 de la firma dibujada en el canvas
     const firmaBase64 = this.firmaCanvas.nativeElement.toDataURL();
-    
+
     // 5. Crear un elemento de imagen HTML y configurarlo
     const imgFirma = document.createElement('img');
     imgFirma.src = firmaBase64;
-    imgFirma.width = 400; 
+    imgFirma.width = 400;
     imgFirma.style.border = '1px solid #000';
     imgFirma.style.marginTop = '10px';
-    
+
     // 6. Reemplazar el elemento <canvas> por la imagen de la firma
     const canvasElement = printContent.querySelector('canvas');
     if (canvasElement) {
-        const parent = canvasElement.parentElement;
-        if (parent) {
-            parent.replaceChild(imgFirma, canvasElement);
-        }
+      const parent = canvasElement.parentElement;
+      if (parent) {
+        parent.replaceChild(imgFirma, canvasElement);
+      }
     }
 
     // 7. Obtener el HTML final del contenido del contrato
@@ -158,7 +189,7 @@ export class AlquileresComponent implements OnInit {
 
     // 8. Abrir ventana de impresión
     const win = window.open('', '_blank');
-    
+
     // Escribimos la estructura de la página de impresión con estilos básicos para el contrato
     win!.document.write(`
       <html>
@@ -192,15 +223,15 @@ export class AlquileresComponent implements OnInit {
 
   confirmarFinalizacion() {
     console.log('Finalizando contrato...');
-   if (this.alquilerFinalizar === null || this.kilometrajeFinal < this.alquilerFinalizar?.kilometraje_inicio) {
+    if (this.alquilerFinalizar === null || this.kilometrajeFinal < this.alquilerFinalizar?.kilometraje_inicial) {
       alert('El kilometraje final no puede ser menor que el kilometraje inicial.');
-   }
+    }
 
   }
 
   cerrarFinalizar() {
     this.finalizarVisible = false;
-  } 
+  }
 
   // === Servicios === //
 
@@ -212,11 +243,14 @@ export class AlquileresComponent implements OnInit {
           ...a,
           fecha_inicio: a.fecha_inicio ? new Date(a.fecha_inicio as any) : new Date()
         }));
+
+        this.cdr.markForCheck();
         this.applyFilter();
         this.loading = false;
       },
       error: err => {
         console.error('Error cargando alquileres', err);
+        this.cdr.markForCheck();
         this.loading = false;
       }
     });
@@ -268,10 +302,10 @@ export class AlquileresComponent implements OnInit {
       cliente: null as any,
       id_vehiculo: 0,
       vehiculo: null as any,
-      id_empleado: 0,
+      id_empleado: 1, // cambiar despues cuando usemos sesionessssssss -----------------------------------
       empleado: null as any,
       fecha_inicio: new Date(),
-      kilometraje_inicio: 0,
+      kilometraje_inicial: 0,
       estado: 'activo'
     };
     this.isEditing = false;
@@ -281,7 +315,7 @@ export class AlquileresComponent implements OnInit {
   editAlquiler(a: Alquiler): void {
     this.selectedAlquiler = {
       ...a,
-      fecha_inicio: new Date(a.fecha_inicio)
+      fecha_inicio: undefined
     };
     this.isEditing = true;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
@@ -290,7 +324,7 @@ export class AlquileresComponent implements OnInit {
   saveAlquiler(): void {
     if (!this.selectedAlquiler) return;
 
-    const payload = { ...this.selectedAlquiler };
+    const payload = { ...this.selectedAlquiler, id_empleado: 1 }; // cambiar despues cuando usemos sesionessssssss -----------------------------------
 
     if (this.isEditing) {
       this.alquileresService.update(payload).subscribe({

@@ -15,7 +15,7 @@
         <label>Vehículo</label>
         <select name="id_vehiculo" required [(ngModel)]="selectedAlquiler.id_vehiculo">
           <option value="">Seleccionar vehículo</option>
-          <option *ngFor="let v of vehiculos" [value]="v.id_vehiculo">{{ v.marca }} {{ v.modelo }} ({{ v.patente }})
+          <option *ngFor="let v of vehiculos" [value]="v.id">{{ v.marca }} {{ v.modelo }} ({{ v.patente }})
           </option>
         </select>
       </div>

@@ -9,7 +9,6 @@
   <table class="alquileres-table" *ngIf="alquileres && alquileres.length; else emptyList">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Cliente</th>
         <th>Vehículo</th>
         <th>Empleado</th>
@@ -23,14 +22,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let a of alquileresFiltered">
-        <td>{{ a.id_alquiler }}</td>
-        <td>{{ a.cliente.nombre || 'N/A' }}</td>
-        <td>{{ (a.vehiculo.marca || 'N/A') }} {{ (a.vehiculo.modelo || '') }}</td>
-        <td>{{ a.empleado.nombre || 'N/A' }}</td>
+        <td>{{ getCliente(a.id_cliente)?.nombre }}</td>
+        <td>{{ (getVehiculo(a.id_vehiculo)?.marca ) }} {{ (getVehiculo(a.id_vehiculo)?.modelo ) }}</td>
+        <td>{{ getEmpleado(a.id_empleado)?.nombre }}</td>
         <td>{{ a.fecha_inicio | date:'shortDate' }}</td>
         <td>{{ a.fecha_fin ? (a.fecha_fin | date:'shortDate') : ''}}</td>
-        <td>{{ a.kilometraje_inicio }}</td>
-        <td>{{ a.kilometraje_fin }}</td>
+        <td>{{ a.kilometraje_inicial }}</td>
+        <td>{{ a.kilometraje_final }}</td>
         <td>{{ a.costo_total ? ('$' + a.costo_total) : '' }}</td>
         <td class="acciones">
           <button class="boton-ver" (click)="verContrato(a)" *ngIf="a.fecha_fin">Ver</button>

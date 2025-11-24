@@ -89,6 +89,7 @@ export class ClientesComponent implements OnInit {
     if (this.isEditing) {
       this.clientesService.update(this.selectedCliente).subscribe({
         next: () => {
+          console.log('Cliente actualizado con éxito', this.selectedCliente);
           this.loadClientes();
           this.cancel();
         },

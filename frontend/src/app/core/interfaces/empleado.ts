@@ -1,7 +1,7 @@
 import { Negocio } from './negocio';
 
 export interface Empleado {
-  id_empleado: number;
+  id: number;
   nombre: string;
   dni: string;
   cargo: string;

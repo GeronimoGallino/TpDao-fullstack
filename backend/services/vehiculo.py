@@ -24,6 +24,13 @@ def listar_vehiculos(db: Session):
 
 
 # ---------------------------------------------------------
+# Listar vehículos (todos)
+# ---------------------------------------------------------
+def listar_todos_vehiculos(db: Session):
+    return db.query(Vehiculo).all()
+
+
+# ---------------------------------------------------------
 # Obtener vehículo por ID
 # ---------------------------------------------------------
 def obtener_vehiculo(db: Session, vehiculo_id: int):

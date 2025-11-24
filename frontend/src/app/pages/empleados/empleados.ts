@@ -62,7 +62,7 @@ export class EmpleadosComponent implements OnInit {
 
   newEmpleado(): void {
     this.selectedEmpleado = {
-      id_empleado: 0,
+      id: 0,
       nombre: '',
       dni: '',
       cargo: '',
@@ -105,7 +105,7 @@ export class EmpleadosComponent implements OnInit {
   deleteEmpleado(e?: Empleado): void {
     const target = e ?? this.toDeleteEmpleado;
     if (!target) return;
-    this.empleadosService.delete(target.id_empleado).subscribe({
+    this.empleadosService.delete(target.id).subscribe({
       next: () => { this.toDeleteEmpleado = null; this.loadEmpleados(); },
       error: err => console.error('Error eliminando empleado', err)
     });

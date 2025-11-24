@@ -10,10 +10,10 @@ export interface Alquiler {
     vehiculo: Vehiculo; // asigno
     id_empleado: number;
     empleado: Empleado; // se lo coloco con la sesion iniciada
-    fecha_inicio: Date; // no te lo asigno, lo asigna la bd
+    fecha_inicio?: Date; // no te lo asigno, lo asigna la bd
     fecha_fin?: Date;
     costo_total?: number;
-    kilometraje_inicio: number;
-    kilometraje_fin?: number;
+    kilometraje_inicial: number;
+    kilometraje_final?: number;
     estado: string;
 }
