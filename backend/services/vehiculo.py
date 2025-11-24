@@ -24,10 +24,10 @@ def listar_vehiculos(db: Session):
 
 
 # ---------------------------------------------------------
-# Listar vehículos (todos)
+# Listar vehículos que no estén eliminados (pueden estar no disponibles)
 # ---------------------------------------------------------
 def listar_todos_vehiculos(db: Session):
-    return db.query(Vehiculo).all()
+    return db.query(Vehiculo).filter(Vehiculo.estado == "activo").all()
 
 
 # ---------------------------------------------------------
@@ -63,7 +63,7 @@ def actualizar_vehiculo(db: Session, vehiculo_id: int, datos: VehiculoCreate):
 def eliminar_vehiculo(db: Session, vehiculo_id: int):
     vehiculo = obtener_vehiculo(db, vehiculo_id)
 
-    vehiculo.disponible = False
+    vehiculo.estado = "inactivo"
     db.commit()
     return {"mensaje": "Vehículo eliminado correctamente"}
 
