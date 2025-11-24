@@ -13,22 +13,73 @@ import { Home } from './core/components/home/home';
 import { AuthGuard } from './core/services/authguard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full'
+    },
 
-    { path: 'home', component: Home, canActivate: [AuthGuard] },
+    {
+        path: 'home',
+        component: Home,
+        canActivate: [AuthGuard]
+    },
 
-    { path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard] },
-    { path: 'empleados', component: EmpleadosComponent, canActivate: [AuthGuard] },
-    { path: 'vehiculos', component: VehiculosComponent, canActivate: [AuthGuard] },
-    { path: 'alquileres/nuevo', component: NuevoAlquilerComponent, canActivate: [AuthGuard] },
-    { path: 'alquileres', component: AlquileresComponent, canActivate: [AuthGuard] },
-    { path: 'reportes/alquileres', component: RepAlqCli, canActivate: [AuthGuard] },
-    { path: 'reportes/vehiculos', component: RepTopAlq, canActivate: [AuthGuard] },
-    { path: 'reportes/periodo', component: RepAlqPer, canActivate: [AuthGuard] },
-    { path: 'reportes/facturacion', component: RepFacMen, canActivate: [AuthGuard] },
+    {
+        path: 'clientes',
+        component: ClientesComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'empleados',
+        component: EmpleadosComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'vehiculos',
+        component: VehiculosComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'alquileres/nuevo',
+        component: NuevoAlquilerComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'alquileres',
+        component: AlquileresComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reportes/alquileres',
+        component: RepAlqCli,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reportes/vehiculos',
+        component: RepTopAlq,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reportes/periodo',
+        component: RepAlqPer,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'reportes/facturacion',
+        component: RepFacMen,
+        canActivate: [AuthGuard]
+    },
 
-    { path: 'login', component: Login },
+    {
+        path: 'login',
+        component: Login
+    },
 
-    { path: '**', redirectTo: 'login', pathMatch: 'full' }
+    {
+        path: '**',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    }
 ];
 

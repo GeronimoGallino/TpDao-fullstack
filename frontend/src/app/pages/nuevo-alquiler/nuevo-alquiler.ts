@@ -9,6 +9,7 @@ import { EmpleadosService } from '../../core/services/empleados-service';
 import { VehiculosService } from '../../core/services/vehiculos-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nuevo-alquiler',
@@ -19,10 +20,10 @@ import { CommonModule, DatePipe } from '@angular/common';
   providers: [DatePipe]                 
 })
 export class NuevoAlquilerComponent implements OnInit {
+  
   datosCorrectos() {
     if (!this.selectedAlquiler) return false;
-    console.log('Validando datos del alquiler:', this.selectedAlquiler, this.selectedAlquiler.id_cliente > 0, this.selectedAlquiler.id_vehiculo > 0);
-    return this.selectedAlquiler.id_cliente > 0 &&
+      return this.selectedAlquiler.id_cliente > 0 &&
       this.selectedAlquiler.id_vehiculo > 0 // &&
       // this.selectedAlquiler.id_empleado > 0
   }
@@ -43,7 +44,8 @@ export class NuevoAlquilerComponent implements OnInit {
     private alquileresService: AlquileresService,
     private clientesService: ClientesService,
     private empleadosService: EmpleadosService,
-    private vehiculosService: VehiculosService
+    private vehiculosService: VehiculosService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -97,9 +99,11 @@ export class NuevoAlquilerComponent implements OnInit {
     };
 
     this.alquileresService.create(payload as any).subscribe({
-      next: () => { /* acción post-creación */ this.newAlquiler(); },
+      next: () => { /* acción post-creación */ this.newAlquiler(); alert('Alquiler creado con éxito'); },
       error: err => console.error('Error creando alquiler', err)
     });
+
+    this.router.navigate(['/home']);
   }
 
   cancel(): void {

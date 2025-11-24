@@ -223,10 +223,21 @@ export class AlquileresComponent implements OnInit {
 
   confirmarFinalizacion() {
     console.log('Finalizando contrato...');
+    
     if (this.alquilerFinalizar === null || this.kilometrajeFinal < this.alquilerFinalizar?.kilometraje_inicial) {
       alert('El kilometraje final no puede ser menor que el kilometraje inicial.');
+      return;
     }
-
+    return this.alquileresService.finalizar({
+      ...this.alquilerFinalizar!,
+      kilometraje_final: this.kilometrajeFinal
+    }).subscribe({
+      next: () => {
+        this.loadAlquileres();  
+        this.cerrarFinalizar();
+      },
+      error: err => console.error('Error finalizando alquiler', err)
+    });
   }
 
   cerrarFinalizar() {
