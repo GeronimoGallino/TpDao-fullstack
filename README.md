@@ -12,7 +12,7 @@
 
 ### 🔹 Frontend
 - Angular 
-- HTML / CSS / JavaScript
+- HTML / CSS / TypeScript
 
 el backend se levanta con el comando: uvicorn backend.main:app --reload
 parado sobre la raiz del proyecto 
