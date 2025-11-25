@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-
-export interface User {
-  id: number;
-  email: string;
-  role: 'admin' | 'user';
-}
+import { User } from '../interfaces/user';
 
 export interface LoginResponse {
   token: string;

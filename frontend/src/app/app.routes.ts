@@ -17,90 +17,26 @@ import { MantenimientosPendComponent } from './pages/mant-pendiente/mant-pendien
 import { MultasComponent } from './pages/multas/multas';
 
 export const routes: Routes = [
-    {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-    },
-    {
-        path: 'home',
-        component: Home,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'clientes',
-        component: ClientesComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'empleados',
-        component: EmpleadosComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'vehiculos',
-        component: VehiculosComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'alquileres/nuevo',
-        component: NuevoAlquilerComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'alquileres',
-        component: AlquileresComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'mantenimientos/nuevo',
-        component: MantenimientosComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'mantenimientos/historial',
-        component: MantenimientosListComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'mantenimientos/pendientes',
-        component: MantenimientosPendComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'multas',
-        component: MultasComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'reportes/alquileres',
-        component: RepAlqCli,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'reportes/vehiculos',
-        component: RepTopAlq,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'reportes/periodo',
-        component: RepAlqPer,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'reportes/facturacion',
-        component: RepFacMen,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'login',
-        component: Login
-    },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: Home, canActivate: [AuthGuard] },
+    { path: 'clientes', component: ClientesComponent, canActivate: [AuthGuard] },
+    { path: 'empleados', component: EmpleadosComponent, canActivate: [AuthGuard] },
+    { path: 'vehiculos', component: VehiculosComponent, canActivate: [AuthGuard] },
+    { path: 'alquileres/nuevo', component: NuevoAlquilerComponent, canActivate: [AuthGuard] },
+    { path: 'alquileres', component: AlquileresComponent, canActivate: [AuthGuard] },
+    { path: 'mantenimientos/nuevo', component: MantenimientosComponent, canActivate: [AuthGuard] },
+    { path: 'mantenimientos/historial', component: MantenimientosListComponent, canActivate: [AuthGuard] },
+    { path: 'mantenimientos/pendientes', component: MantenimientosPendComponent, canActivate: [AuthGuard] },
+    { path: 'multas', component: MultasComponent, canActivate: [AuthGuard] },
 
-    {
-        path: '**',
-        redirectTo: 'login',
-        pathMatch: 'full'
-    }
+    // REPORTES: solo admins pueden acceder
+    { path: 'reportes/alquileres', component: RepAlqCli, canActivate: [AuthGuard], data: { role: 'admin' } },
+    { path: 'reportes/vehiculos', component: RepTopAlq, canActivate: [AuthGuard], data: { role: 'admin' } },
+    { path: 'reportes/periodo', component: RepAlqPer, canActivate: [AuthGuard], data: { role: 'admin' } },
+    { path: 'reportes/facturacion', component: RepFacMen, canActivate: [AuthGuard], data: { role: 'admin' } },
+
+    { path: 'login', component: Login },
+    { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
+
 

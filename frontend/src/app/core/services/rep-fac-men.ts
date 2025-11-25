@@ -10,7 +10,7 @@ export class RepFacMen {
 
   constructor(private http: HttpClient) {}
 
-  getFacMensual(cantidad: number): Observable<any[]> {
+  getFacMensual(): Observable<any[]> {
     const res$ = this.http.get<any[]>(this.baseUrl);
     res$.subscribe(data => console.log('Datos recibidos:', data));
     return res$;
