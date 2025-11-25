@@ -22,6 +22,9 @@ export class ClientesComponent implements OnInit {
   isEditing = false;
   loading = false;
 
+  // NUEVO: mensaje de error
+  errorMessage: string | null = null;
+
   constructor(
     private clientesService: ClientesService,
     private cdr: ChangeDetectorRef
@@ -38,9 +41,7 @@ export class ClientesComponent implements OnInit {
       next: list => {
         this.clientes = list || [];
         this.applyFilter();
-
-        this.cdr.markForCheck(); // fuerza actualización para OnPush
-
+        this.cdr.markForCheck();
         this.loading = false;
       },
       error: err => {
@@ -74,26 +75,36 @@ export class ClientesComponent implements OnInit {
       fecha_registro: new Date()
     };
     this.isEditing = false;
+    this.errorMessage = null;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
   }
 
   editCliente(c: Cliente): void {
     this.selectedCliente = { ...c, fecha_registro: c.fecha_registro ? new Date(c.fecha_registro) : new Date() };
     this.isEditing = true;
+    this.errorMessage = null;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
   }
 
   saveCliente(): void {
     if (!this.selectedCliente) return;
 
+    this.errorMessage = null; // limpiar mensaje previo
+
     if (this.isEditing) {
       this.clientesService.update(this.selectedCliente).subscribe({
         next: () => {
-          console.log('Cliente actualizado con éxito', this.selectedCliente);
           this.loadClientes();
           this.cancel();
         },
-        error: err => console.error('Error actualizando cliente', err)
+        error: err => {
+          if (err.error && err.error.detail) {
+            this.errorMessage = err.error.detail;
+          } else {
+            this.errorMessage = 'Error actualizando cliente';
+          }
+          this.cdr.markForCheck();
+        }
       });
     } else {
       this.clientesService.create(this.selectedCliente).subscribe({
@@ -101,7 +112,14 @@ export class ClientesComponent implements OnInit {
           this.loadClientes();
           this.cancel();
         },
-        error: err => console.error('Error creando cliente', err)
+        error: err => {
+          if (err.error && err.error.detail) {
+            this.errorMessage = err.error.detail;
+          } else {
+            this.errorMessage = 'Error creando cliente';
+          }
+          this.cdr.markForCheck();
+        }
       });
     }
   }
@@ -127,5 +145,17 @@ export class ClientesComponent implements OnInit {
     this.selectedCliente = null;
     this.toDeleteCliente = null;
     this.isEditing = false;
+    this.errorMessage = null;
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+    }
   }
 }
+
+
+
+ 

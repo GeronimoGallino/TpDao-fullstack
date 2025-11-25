@@ -161,7 +161,7 @@
   display: flex;
   gap: 10px;
   margin-top: 6px;
-  color: gray
+  color: gray;
 }
 
 .form-actions button {
@@ -214,7 +214,6 @@
 }
 
 .confirm-delete button:first-of-type {
-  background: #fff;
   background: var(--danger);
   color: #374151;
 }
@@ -223,6 +222,13 @@
   background: #fff;
   border: 1px solid var(--border);
   color: #374151;
+}
+
+/* Estilo para el mensaje de error backend, siempre visible */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 760px) {
