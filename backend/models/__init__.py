@@ -6,4 +6,4 @@ from .vehiculo import Vehiculo
 from .alquiler import Alquiler
 from .mantenimiento import Mantenimiento
 from .multa import Multa
-
+from .usuario import Usuario

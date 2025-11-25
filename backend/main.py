@@ -31,8 +31,10 @@ app.include_router(vehiculo.router, prefix="/api")
 app.include_router(empleado.router, prefix="/api")
 app.include_router(alquiler.router, prefix="/api")
 app.include_router(mantenimiento.router, prefix="/api")
+app.include_router(plan_mantenimiento.router, prefix="/api")
 app.include_router(reportes.router, prefix="/api")
 app.include_router(multa.router, prefix="/api")
+app.include_router(usuario.router, prefix="/api")   
 
 @app.get("/")
 def root():
