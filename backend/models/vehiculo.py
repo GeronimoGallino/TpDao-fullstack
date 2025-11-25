@@ -102,6 +102,7 @@ class Vehiculo(Base):
     @property
     def necesita_mantenimiento(self) -> bool:
         datos = self.consultar_proximo_mantenimiento() or {}
+        print("Vehiculo: ", self.marca, ". Datos mantenimiento:", datos)
         return bool(datos.get("alerta_km")) or bool(datos.get("alerta_fecha"))
 
 

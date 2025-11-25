@@ -14,7 +14,8 @@ class VehiculoBase(BaseModel):
     disponible: bool | None = True
     costo_diario: int
     estado: str | None = "Activo"
-    necesita_mantenimiento: bool 
+    necesita_mantenimiento: bool | None = False
+
 
     # --- VALIDACIONES ---
     """"

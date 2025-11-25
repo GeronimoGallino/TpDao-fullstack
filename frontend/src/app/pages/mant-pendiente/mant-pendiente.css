@@ -66,6 +66,26 @@
 
 .alquileres-table tbody tr:nth-child(even) { background: #fbfdff; }
 
+.alquileres-table button {
+  margin-right: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Estilo principal (verde) */
+.alquileres-table button {
+  background: #059669; /* verde */
+  color: #fff;
+  border-color: rgba(5,150,105,0.12);
+}
+
+.alquileres-table button:hover {
+  filter: brightness(.95);
+}
+
 .badge {
   padding: 3px 8px;
   border-radius: 4px;

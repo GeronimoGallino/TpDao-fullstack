@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from backend.models.vehiculo import Vehiculo
 from backend.schemas.vehiculo import VehiculoCreate
+from backend.models.mantenimiento import Mantenimiento
+from datetime import datetime, timezone
 
 
 # ---------------------------------------------------------
@@ -10,17 +12,17 @@ from backend.schemas.vehiculo import VehiculoCreate
 # ---------------------------------------------------------
 def crear_vehiculo(db: Session, datos: VehiculoCreate):
     # 1. Crear el vehículo
-    nuevo_vehiculo = Vehiculo(**datos.model_dump())
+    nuevo_vehiculo = Vehiculo(**datos.model_dump(exclude={"necesita_mantenimiento"}))
     db.add(nuevo_vehiculo)
     db.commit()
     db.refresh(nuevo_vehiculo)
 
     # 2. Crear mantenimiento de confirmación
     mantenimiento_inicial = Mantenimiento(
-        id_vehiculo=nuevo.id,
-        id_empleado=id_empleado,  # el usuario que lo da de alta
+        id_vehiculo=nuevo_vehiculo.id,
+        id_empleado=1,  # el usuario que lo da de alta
         fecha=datetime.now(timezone.utc),
-        km_actual=nuevo.kilometraje,
+        km_actual=nuevo_vehiculo.kilometraje,
         tipo="confirmacion",
         costo=0,
         observaciones="Mantenimiento inicial de confirmación",

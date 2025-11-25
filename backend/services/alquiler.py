@@ -1,5 +1,6 @@
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
+from backend.services.observer.mantenimiento_subject import mantenimiento_subject
 from fastapi import HTTPException
 from datetime import datetime, timezone
 import math
@@ -189,6 +190,12 @@ def finalizar_alquiler(alquiler_id: int, datos: schemas.AlquilerFinalizar, db: S
     # 8) Liberar vehículo (disponible = True)
     _set_disponibilidad_vehiculo(db, vehiculo, True)
     vehiculo.kilometraje = datos.kilometraje_final
+
+    # 9) Notificar al observer (actualizar alerta de mantenimiento)
+    mantenimiento_subject.notify(
+        event_name="alquiler_finalizado",
+        data={"vehiculo": vehiculo}
+    )
 
     db.commit()
     db.refresh(alquiler)
