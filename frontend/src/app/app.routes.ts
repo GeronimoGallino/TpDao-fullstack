@@ -7,7 +7,7 @@ import { AlquileresComponent } from './pages/alquileres/alquileres';
 import { RepAlqCli } from './pages/rep-alq-cli/rep-alq-cli';
 import { RepTopAlq } from './pages/rep-top-alq/rep-top-alq';
 import { RepAlqPer } from './pages/rep-alq-per/rep-alq-per';
-import { RepFacMen } from './pages/rep-fac-men/rep-fac-men';
+import { RepFacMenComponent } from './pages/rep-fac-men/rep-fac-men';
 import { Login } from './core/components/login/login';
 import { Home } from './core/components/home/home';
 import { AuthGuard } from './core/services/authguard';
@@ -33,7 +33,7 @@ export const routes: Routes = [
     { path: 'reportes/alquileres', component: RepAlqCli, canActivate: [AuthGuard], data: { role: 'admin' } },
     { path: 'reportes/vehiculos', component: RepTopAlq, canActivate: [AuthGuard], data: { role: 'admin' } },
     { path: 'reportes/periodo', component: RepAlqPer, canActivate: [AuthGuard], data: { role: 'admin' } },
-    { path: 'reportes/facturacion', component: RepFacMen, canActivate: [AuthGuard], data: { role: 'admin' } },
+    { path: 'reportes/facturacion', component: RepFacMenComponent, canActivate: [AuthGuard], data: { role: 'admin' } },
 
     { path: 'login', component: Login },
     { path: '**', redirectTo: 'login', pathMatch: 'full' }

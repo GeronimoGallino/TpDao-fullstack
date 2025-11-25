@@ -1,1 +1,28 @@
-<p>rep-fac-men works!</p>
+<div class="reporte-container">
+  <h1>Ventas Mensuales Últimos 12 Meses</h1>
+
+  <div *ngIf="loading" class="loading">Cargando datos...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && datos?.length" class="chart-area">
+    <span class="eje-y-max">{{ maxTotal | currency:'ARS' }}</span>
+    <span class="eje-y-cero"></span>
+
+    <ng-container *ngFor="let item of datos; trackBy: trackByMes">
+      <div class="bar-container" [style.height.%]="100">
+        <div
+          class="bar"
+          [style.height.%]="getHeight(item.total)"
+          title="{{ item.total | currency:'ARS' }}">
+        </div>
+
+        <div class="tooltip">{{ item.total | currency:'ARS' }}</div>
+        <div class="label">{{ getMesLabel(item.mes) }}</div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div *ngIf="!loading && !error && (!datos || datos.length === 0)" class="loading">
+    Sin datos para mostrar.
+  </div>
+</div>
