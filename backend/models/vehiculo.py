@@ -45,10 +45,6 @@ class Vehiculo(Base):
     def consultar_proximo_mantenimiento(self):
         fecha_actual = datetime.now(timezone.utc)
 
-        # ────────────────────────────────────────────────
-        # Caso 1: hay mantenimientos → usar el último
-        # ────────────────────────────────────────────────
-
         if self.mantenimientos:
             ultimo = self.mantenimientos[-1]
 
@@ -61,7 +57,16 @@ class Vehiculo(Base):
                 kilometraje_actual=self.kilometraje,
                 fecha_actual=fecha_actual
             )
+        else:
+        # fallback seguro
+            return {
+                "proximo_km": self.kilometraje + INTERVALO_KM_DEFAULT,
+                "proxima_fecha": fecha_actual + timedelta(days=30*INTERVALO_MESES_DEFAULT),
+                "alerta_km": False,
+                "alerta_fecha": False
+        }
         
+        """
         # ────────────────────────────────────────────────
         # Caso 2: no hay mantenimientos → calcular manualmente con defaults
         # ────────────────────────────────────────────────
@@ -92,12 +97,13 @@ class Vehiculo(Base):
                 "alerta_km": alerta_km,
                 "alerta_fecha": alerta_fecha
             }
-    
+    """
 
     @property
     def necesita_mantenimiento(self) -> bool:
-        datos = self.consultar_proximo_mantenimiento()
-        return datos["alerta_km"] or datos["alerta_fecha"]
+        datos = self.consultar_proximo_mantenimiento() or {}
+        return bool(datos.get("alerta_km")) or bool(datos.get("alerta_fecha"))
+
 
     #def actualizar_kilometraje(self, km_realizados: int):
     #    self.kilometraje = self.kilometraje + km_realizados

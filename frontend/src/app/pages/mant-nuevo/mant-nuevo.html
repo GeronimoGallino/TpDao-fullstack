@@ -5,11 +5,12 @@
     <form #mantenimientoForm="ngForm" (ngSubmit)="crearMantenimiento()" class="mantenimiento-form">
 
         <div>
-
             <label>Vehículo</label>
-            <select name="id_vehiculo" required [(ngModel)]="mantenimiento.id_vehiculo">
+            <select name="id_vehiculo" required [(ngModel)]="mantenimiento.id_vehiculo"
+                (ngModelChange)="onVehiculoChange($event)">
                 <option value="">Seleccionar vehículo</option>
-                <option *ngFor="let v of vehiculos" [value]="v.id">{{ v.marca }} {{ v.modelo }} ({{ v.patente }})
+                <option *ngFor="let v of vehiculos" [ngValue]="v.id">
+                    {{ v.marca }} {{ v.modelo }} ({{ v.patente }})
                 </option>
             </select>
         </div>
@@ -21,7 +22,7 @@
 
         <div>
             <label>Kilometraje actual</label>
-            <input type="number" name="km_actual" required [(ngModel)]="mantenimiento.km_actual" />
+            <input type="number" name="km_actual" required [(ngModel)]="mantenimiento.km_actual" readonly />
         </div>
 
         <div>

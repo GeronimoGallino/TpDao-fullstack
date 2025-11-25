@@ -26,7 +26,17 @@ export class VehiculosService {
   }
 
   create(vehiculo: Vehiculo): Observable<Vehiculo> {
-    return this.http.post<Vehiculo>(this.baseUrl, vehiculo);
+    const payload = {
+      anio: vehiculo.anio,
+      costo_diario: vehiculo.costo_diario,
+      disponible: vehiculo.disponible,
+      kilometraje: vehiculo.kilometraje,
+      marca: vehiculo.marca,
+      modelo: vehiculo.modelo,
+      patente: vehiculo.patente,
+      tipo: vehiculo.tipo
+    }
+    return this.http.post<Vehiculo>(this.baseUrl, payload);
   }
 
   update(vehiculo: Vehiculo): Observable<Vehiculo> {

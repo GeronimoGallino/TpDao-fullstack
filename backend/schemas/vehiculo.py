@@ -13,7 +13,7 @@ class VehiculoBase(BaseModel):
     kilometraje: int | None = 0
     disponible: bool | None = True
     costo_diario: int
-    estado: str | None = "activo"
+    estado: str | None = "Activo"
     necesita_mantenimiento: bool 
 
     # --- VALIDACIONES ---

@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-
-export interface User {
-  id: number;
-  email: string;
-  role: 'admin' | 'user';
-}
+import { User } from '../interfaces/user';
 
 export interface LoginResponse {
   token: string;
@@ -24,6 +19,16 @@ export class AuthService {
 
   private currentUser: User | null = null;
   private token: string | null = null;
+
+  constructor() {
+    const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
+
+    if (savedUser && savedToken) {
+      this.currentUser = JSON.parse(savedUser);
+      this.token = savedToken;
+    }
+  }
 
   login(credentials: { email: string; password: string }): Observable<LoginResponse> {
     const user = this.USERS.find(

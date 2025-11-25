@@ -43,6 +43,8 @@ export class Login {
         // Guardar token
         localStorage.setItem('token', res.token);
 
+        localStorage.setItem('user', JSON.stringify(res.user))
+
         // Redirigir al home
         this.router.navigate(['/home']);
       },

@@ -9,5 +9,5 @@ export interface Vehiculo {
     disponible: boolean;
     costo_diario: number;
     estado: string;
-    // necesita_mantenimiento: boolean;
+    necesita_mantenimiento: boolean;
 }

@@ -110,7 +110,7 @@ def seed_vehiculos(db):
             kilometraje=45000,
             disponible=True,
             costo_diario=12000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2020, 5, 10, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -122,7 +122,7 @@ def seed_vehiculos(db):
             kilometraje=80000,
             disponible=True,
             costo_diario=18000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2019, 8, 20, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -134,7 +134,7 @@ def seed_vehiculos(db):
             kilometraje=25000,
             disponible=True,
             costo_diario=16000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2022, 7, 1, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -144,9 +144,9 @@ def seed_vehiculos(db):
             patente="DEF234",
             tipo="van",
             kilometraje=120000,
-            disponible=False,  # simulamos que está en mantenimiento
+            disponible=True, 
             costo_diario=20000,
-            estado="mantenimiento",
+            estado="Activo",
             fecha_registro=datetime(2018, 11, 30, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -158,7 +158,7 @@ def seed_vehiculos(db):
             kilometraje=95000,
             disponible=True,
             costo_diario=11000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2017, 4, 12, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -170,7 +170,7 @@ def seed_vehiculos(db):
             kilometraje=60000,
             disponible=True,
             costo_diario=9500,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2018, 6, 20, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -182,7 +182,7 @@ def seed_vehiculos(db):
             kilometraje=30000,
             disponible=True,
             costo_diario=12500,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2020, 9, 5, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -194,7 +194,7 @@ def seed_vehiculos(db):
             kilometraje=20000,
             disponible=True,
             costo_diario=13000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2021, 2, 14, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -206,7 +206,7 @@ def seed_vehiculos(db):
             kilometraje=50000,
             disponible=True,
             costo_diario=17000,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2019, 11, 30, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -218,7 +218,7 @@ def seed_vehiculos(db):
             kilometraje=15000,
             disponible=True,
             costo_diario=18500,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2022, 8, 10, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -230,7 +230,7 @@ def seed_vehiculos(db):
             kilometraje=35000,
             disponible=True,
             costo_diario=17500,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2020, 12, 1, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -252,9 +252,9 @@ def seed_vehiculos(db):
             patente="AK901QR",
             tipo="van",
             kilometraje=70000,
-            disponible=False,
+            disponible=True,
             costo_diario=21000,
-            estado="mantenimiento",
+            estado="Activo",
             fecha_registro=datetime(2019, 10, 18, tzinfo=timezone.utc)
         ),
         Vehiculo(
@@ -266,7 +266,7 @@ def seed_vehiculos(db):
             kilometraje=25000,
             disponible=True,
             costo_diario=19500,
-            estado="activo",
+            estado="Activo",
             fecha_registro=datetime(2021, 7, 7, tzinfo=timezone.utc)
         ),
     ]

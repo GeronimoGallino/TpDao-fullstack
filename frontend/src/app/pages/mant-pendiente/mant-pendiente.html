@@ -11,8 +11,34 @@
     />
   </div>
 
-  <table class="alquileres-table" *ngIf="mantenimientosFiltered.length; else emptyList">
+  <table class="alquileres-table" *ngIf="vehiculosPendientes.length; else emptyList">
     <thead>
+    <tr>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Patente</th>
+      <th>Tipo</th>
+      <th>Kilometraje</th>
+      <th>Mantenimiento</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr *ngFor="let v of vehiculosPendientes">
+  <td>{{ v.marca }}</td>
+  <td>{{ v.modelo }}</td>
+  <td>{{ v.patente }}</td>
+  <td>{{ v.tipo }}</td>
+  <td>{{ v.kilometraje }}</td>
+  <td>
+    <span class="badge alerta">⚠️ Requiere mantenimiento</span>
+  </td>
+      <td>
+      <button (click)="redirigirMantenimiento(v)">Registrar</button>
+    </td>
+</tr>
+  </tbody>
+</table>
+    <!-- <thead>
       <tr>
         <th>Vehículo</th>
         <th>Empleado</th>
@@ -40,7 +66,7 @@
         <td>{{ m.observaciones }}</td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
 
   <ng-template #emptyList>
     <p>No hay mantenimientos registrados.</p>

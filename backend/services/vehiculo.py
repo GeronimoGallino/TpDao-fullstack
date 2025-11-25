@@ -9,10 +9,28 @@ from backend.schemas.vehiculo import VehiculoCreate
 # Crear vehículo
 # ---------------------------------------------------------
 def crear_vehiculo(db: Session, datos: VehiculoCreate):
+    # 1. Crear el vehículo
     nuevo_vehiculo = Vehiculo(**datos.model_dump())
     db.add(nuevo_vehiculo)
     db.commit()
     db.refresh(nuevo_vehiculo)
+
+    # 2. Crear mantenimiento de confirmación
+    mantenimiento_inicial = Mantenimiento(
+        id_vehiculo=nuevo.id,
+        id_empleado=id_empleado,  # el usuario que lo da de alta
+        fecha=datetime.now(timezone.utc),
+        km_actual=nuevo.kilometraje,
+        tipo="confirmacion",
+        costo=0,
+        observaciones="Mantenimiento inicial de confirmación",
+        km_prox_mant=10000,   # valores por defecto
+        meses_prox_mant=12
+    )
+    db.add(mantenimiento_inicial)
+    db.commit()
+    db.refresh(mantenimiento_inicial)
+
     return nuevo_vehiculo
 
 
@@ -27,7 +45,7 @@ def listar_vehiculos(db: Session):
 # Listar vehículos que no estén eliminados (pueden estar no disponibles)
 # ---------------------------------------------------------
 def listar_todos_vehiculos(db: Session):
-    return db.query(Vehiculo).filter(Vehiculo.estado == "activo").all()
+    return db.query(Vehiculo).filter(Vehiculo.estado == "Activo").all()
 
 
 # ---------------------------------------------------------

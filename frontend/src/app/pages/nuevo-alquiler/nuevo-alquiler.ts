@@ -10,6 +10,8 @@ import { VehiculosService } from '../../core/services/vehiculos-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth-service';
+import { User } from '../../core/interfaces/user';
 
 @Component({
   selector: 'app-nuevo-alquiler',
@@ -32,6 +34,8 @@ export class NuevoAlquilerComponent implements OnInit {
   alquileresFiltered: Alquiler[] = [];
   filter = '';
 
+  user: User | null = null;
+
   clientes: Cliente[] = [];
   empleados: Empleado[] = [];
   vehiculos: Vehiculo[] = [];
@@ -45,7 +49,8 @@ export class NuevoAlquilerComponent implements OnInit {
     private clientesService: ClientesService,
     private empleadosService: EmpleadosService,
     private vehiculosService: VehiculosService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +58,7 @@ export class NuevoAlquilerComponent implements OnInit {
     this.loadClientes();
     this.loadEmpleados();
     this.loadVehiculos();
+    this.user = this.authService.getCurrentUser();
   }
 
   loadClientes(): void {
@@ -75,7 +81,7 @@ export class NuevoAlquilerComponent implements OnInit {
       cliente: null as any,
       id_vehiculo: 0,
       vehiculo: null as any,
-      id_empleado: 1, // cambiar despues cuando usemos sesionessssssss -----------------------------------
+      id_empleado: this.user?.id ?? 0, 
       empleado: null as any,
       fecha_inicio: undefined,
       fecha_fin: undefined,
@@ -95,7 +101,7 @@ export class NuevoAlquilerComponent implements OnInit {
     const payload = {
       id_cliente: Number(this.selectedAlquiler.id_cliente),
       id_vehiculo: Number(this.selectedAlquiler.id_vehiculo),
-      id_empleado: 1 // cambiar despues cuando usemos sesionessssssss -----------------------------------
+      id_empleado: this.user?.id ?? 0
     };
 
     this.alquileresService.create(payload as any).subscribe({
