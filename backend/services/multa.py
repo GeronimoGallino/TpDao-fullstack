@@ -29,6 +29,14 @@ def crear_multa(db: Session, datos: MultaCreate):
 
 
 # ---------------------------------------------------------
+# Obtener todas las multas
+# ---------------------------------------------------------
+def obtener_todas_las_multas(db: Session):
+    multas = db.query(Multa).all()
+    return multas
+
+
+# ---------------------------------------------------------
 # Obtener Multa por ID
 # ---------------------------------------------------------
 def obtener_multa(db: Session, multa_id: int):

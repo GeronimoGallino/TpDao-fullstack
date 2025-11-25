@@ -14,6 +14,12 @@ router = APIRouter(prefix="/multas", tags=["Multas"])
 def crear_multa(multa: schemas.MultaCreate, db: Session = Depends(database.get_db)):
     return multa_service.crear_multa(db, multa)
 
+# ============================
+# Obtener todas las multas
+# ============================
+@router.get("/", response_model=list[schemas.Multa])
+def obtener_todas_las_multas(db: Session = Depends(database.get_db)):
+    return multa_service.obtener_todas_las_multas(db)
 
 # ============================
 # Obtener multa por ID
