@@ -116,26 +116,26 @@ def seed_vehiculos(db):
         Vehiculo(
             marca="Ford",
             modelo="Ranger",
-            anio=2019,
+            anio=2024,
             patente="XYZ789",
             tipo="auto",
             kilometraje=80000,
             disponible=True,
             costo_diario=18000,
             estado="Activo",
-            fecha_registro=datetime(2019, 8, 20, tzinfo=timezone.utc)
+            fecha_registro=datetime(2024, 12, 20, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Chevrolet",
             modelo="Captiva",
-            anio=2022,
+            anio=2025,
             patente="LMN456",
             tipo="suv",
             kilometraje=25000,
             disponible=True,
             costo_diario=16000,
             estado="Activo",
-            fecha_registro=datetime(2022, 7, 1, tzinfo=timezone.utc)
+            fecha_registro=datetime(2025, 7, 1, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Mercedes-Benz",
@@ -176,62 +176,62 @@ def seed_vehiculos(db):
         Vehiculo(
             marca="Peugeot",
             modelo="208",
-            anio=2020,
+            anio=2025,
             patente="AE345FG",
             tipo="auto",
             kilometraje=30000,
             disponible=True,
             costo_diario=12500,
             estado="Activo",
-            fecha_registro=datetime(2020, 9, 5, tzinfo=timezone.utc)
+            fecha_registro=datetime(2025, 9, 5, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Fiat",
             modelo="Cronos",
-            anio=2021,
+            anio=2025,
             patente="AF456GH",
             tipo="auto",
             kilometraje=20000,
             disponible=True,
             costo_diario=13000,
             estado="Activo",
-            fecha_registro=datetime(2021, 2, 14, tzinfo=timezone.utc)
+            fecha_registro=datetime(2025, 2, 14, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Hyundai",
             modelo="Tucson",
-            anio=2019,
+            anio=2024,
             patente="AG567IJ",
             tipo="suv",
             kilometraje=50000,
             disponible=True,
             costo_diario=17000,
             estado="Activo",
-            fecha_registro=datetime(2019, 11, 30, tzinfo=timezone.utc)
+            fecha_registro=datetime(2024, 11, 30, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Kia",
             modelo="Sportage",
-            anio=2022,
+            anio=2023,
             patente="AH678KL",
             tipo="suv",
             kilometraje=15000,
             disponible=True,
             costo_diario=18500,
             estado="Activo",
-            fecha_registro=datetime(2022, 8, 10, tzinfo=timezone.utc)
+            fecha_registro=datetime(2023, 8, 10, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Nissan",
             modelo="X-Trail",
-            anio=2020,
+            anio=2024,
             patente="AI789MN",
             tipo="suv",
             kilometraje=35000,
             disponible=True,
             costo_diario=17500,
             estado="Activo",
-            fecha_registro=datetime(2020, 12, 1, tzinfo=timezone.utc)
+            fecha_registro=datetime(2024, 12, 1, tzinfo=timezone.utc)
         ),
         Vehiculo(
             marca="Citroën",
@@ -260,14 +260,14 @@ def seed_vehiculos(db):
         Vehiculo(
             marca="Ford",
             modelo="Transit",
-            anio=2021,
+            anio=2025,
             patente="AL012ST",
             tipo="van",
             kilometraje=25000,
             disponible=True,
             costo_diario=19500,
             estado="Activo",
-            fecha_registro=datetime(2021, 7, 7, tzinfo=timezone.utc)
+            fecha_registro=datetime(2025, 7, 7, tzinfo=timezone.utc)
         ),
     ]
 
@@ -450,11 +450,22 @@ def seed_alquileres(db):
             estado="Finalizado"
         ),
         Alquiler(
+            id_cliente=8,
+            id_vehiculo=1,  # Toyota Corolla
+            id_empleado=3,
+            fecha_inicio=datetime(2024, 9, 1, tzinfo=timezone.utc),
+            fecha_fin=datetime(2024, 9, 5, tzinfo=timezone.utc),
+            kilometraje_inicial=45200,
+            kilometraje_final=46000,
+            costo_total=4 * 12000,  # 4 días
+            estado="Finalizado"
+        ),
+        Alquiler(
             id_cliente=2,
             id_vehiculo=2,  # Ford Ranger
             id_empleado=3,
-            fecha_inicio=datetime(2023, 6, 10, tzinfo=timezone.utc),
-            fecha_fin=datetime(2023, 6, 15, tzinfo=timezone.utc),
+            fecha_inicio=datetime(2025, 6, 10, tzinfo=timezone.utc),
+            fecha_fin=datetime(2025, 6, 15, tzinfo=timezone.utc),
             kilometraje_inicial=80000,
             kilometraje_final=80500,
             costo_total=5 * 18000,
@@ -464,8 +475,8 @@ def seed_alquileres(db):
             id_cliente=3,
             id_vehiculo=3,  # Chevrolet Captiva
             id_empleado=4,
-            fecha_inicio=datetime(2023, 7, 20, tzinfo=timezone.utc),
-            fecha_fin=datetime(2023, 7, 23, tzinfo=timezone.utc),
+            fecha_inicio=datetime(2025, 7, 20, tzinfo=timezone.utc),
+            fecha_fin=datetime(2025, 7, 23, tzinfo=timezone.utc),
             kilometraje_inicial=25000,
             kilometraje_final=25200,
             costo_total=3 * 16000,
@@ -475,8 +486,8 @@ def seed_alquileres(db):
             id_cliente=4,
             id_vehiculo=5,  # Volkswagen Golf
             id_empleado=2,
-            fecha_inicio=datetime(2023, 8, 1, tzinfo=timezone.utc),
-            fecha_fin=datetime(2023, 8, 4, tzinfo=timezone.utc),
+            fecha_inicio=datetime(2024, 8, 1, tzinfo=timezone.utc),
+            fecha_fin=datetime(2024, 8, 4, tzinfo=timezone.utc),
             kilometraje_inicial=95000,
             kilometraje_final=95300,
             costo_total=3 * 11000,
@@ -497,8 +508,8 @@ def seed_alquileres(db):
             id_cliente=6,
             id_vehiculo=9,  # Hyundai Tucson
             id_empleado=4,
-            fecha_inicio=datetime(2023, 10, 5, tzinfo=timezone.utc),
-            fecha_fin=datetime(2023, 10, 9, tzinfo=timezone.utc),
+            fecha_inicio=datetime(2025, 10, 5, tzinfo=timezone.utc),
+            fecha_fin=datetime(2025, 10, 9, tzinfo=timezone.utc),
             kilometraje_inicial=50000,
             kilometraje_final=50400,
             costo_total=4 * 17000,
@@ -514,32 +525,6 @@ def seed_alquileres(db):
             kilometraje_final=15100,
             costo_total=2 * 18500,
             estado="Finalizado"
-        ),
-
-        # ---------------- ACTIVOS ----------------
-        Alquiler(
-            id_cliente=8,
-            id_vehiculo=7,  # Peugeot 208
-            id_empleado=3,
-            fecha_inicio=datetime.now(timezone.utc) - timedelta(days=5),
-            kilometraje_inicial=30000,
-            estado="Activo"
-        ),
-        Alquiler(
-            id_cliente=9,
-            id_vehiculo=8,  # Fiat Cronos
-            id_empleado=4,
-            fecha_inicio=datetime.now(timezone.utc) - timedelta(days=3),
-            kilometraje_inicial=20000,
-            estado="Activo"
-        ),
-        Alquiler(
-            id_cliente=1,
-            id_vehiculo=11,  # Nissan X-Trail
-            id_empleado=2,
-            fecha_inicio=datetime.now(timezone.utc) - timedelta(days=7),
-            kilometraje_inicial=35000,
-            estado="Activo"
         ),
     ]
 
@@ -571,7 +556,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=2,
             id_empleado=1,
-            fecha=datetime(2019, 8, 20, tzinfo=timezone.utc),
+            fecha=datetime(2024, 12, 20, tzinfo=timezone.utc),
             km_actual=80000,
             tipo="confirmacion",
             costo=0,
@@ -582,7 +567,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=3,
             id_empleado=1,
-            fecha=datetime(2022, 7, 1, tzinfo=timezone.utc),
+            fecha=datetime(2025, 7, 1, tzinfo=timezone.utc),
             km_actual=25000,
             tipo="confirmacion",
             costo=0,
@@ -626,7 +611,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=7,
             id_empleado=1,
-            fecha=datetime(2020, 9, 5, tzinfo=timezone.utc),
+            fecha=datetime(2025, 9, 5, tzinfo=timezone.utc),
             km_actual=30000,
             tipo="confirmacion",
             costo=0,
@@ -637,7 +622,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=8,
             id_empleado=1,
-            fecha=datetime(2021, 2, 14, tzinfo=timezone.utc),
+            fecha=datetime(2025, 2, 14, tzinfo=timezone.utc),
             km_actual=20000,
             tipo="confirmacion",
             costo=0,
@@ -648,7 +633,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=9,
             id_empleado=1,
-            fecha=datetime(2019, 11, 30, tzinfo=timezone.utc),
+            fecha=datetime(2024, 11, 30, tzinfo=timezone.utc),
             km_actual=50000,
             tipo="confirmacion",
             costo=0,
@@ -659,7 +644,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=10,
             id_empleado=1,
-            fecha=datetime(2022, 8, 10, tzinfo=timezone.utc),
+            fecha=datetime(2023, 8, 10, tzinfo=timezone.utc),
             km_actual=15000,
             tipo="confirmacion",
             costo=0,
@@ -670,7 +655,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=11,
             id_empleado=1,
-            fecha=datetime(2020, 12, 1, tzinfo=timezone.utc),
+            fecha=datetime(2024, 12, 1, tzinfo=timezone.utc),
             km_actual=35000,
             tipo="confirmacion",
             costo=0,
@@ -703,7 +688,7 @@ def seed_mantenimientos(db):
         Mantenimiento(
             id_vehiculo=14,
             id_empleado=1,
-            fecha=datetime(2021, 7, 7, tzinfo=timezone.utc),
+            fecha=datetime(2025, 7, 7, tzinfo=timezone.utc),
             km_actual=25000,
             tipo="confirmacion",
             costo=0,
