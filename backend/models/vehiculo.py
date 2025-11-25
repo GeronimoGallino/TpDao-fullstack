@@ -43,48 +43,41 @@ class Vehiculo(Base):
         return self.mantenimientos
     
     def consultar_proximo_mantenimiento(self):
-
-        """
-        Delegar el cálculo al último mantenimiento registrado.
-        Si no hay mantenimientos, usa los valores por defecto del vehículo.
-        """
-
         fecha_actual = datetime.now(timezone.utc)
 
         # ────────────────────────────────────────────────
         # Caso 1: hay mantenimientos → usar el último
         # ────────────────────────────────────────────────
+
         if self.mantenimientos:
             ultimo = self.mantenimientos[-1]
 
-            # Delegar cálculo al mantenimiento
+            # Normalizar fecha del último mantenimiento
+            fecha_mant = ultimo.fecha
+            if fecha_mant.tzinfo is None:
+                fecha_mant = fecha_mant.replace(tzinfo=timezone.utc)
+
             return ultimo.calcular_proximo_mantenimiento(
                 kilometraje_actual=self.kilometraje,
                 fecha_actual=fecha_actual
             )
-
+        
         # ────────────────────────────────────────────────
         # Caso 2: no hay mantenimientos → calcular manualmente con defaults
         # ────────────────────────────────────────────────
-        else:
-            # Daten por defecto
-            ultimo_km = 0
-            ultima_fecha = self.fecha_registro
 
-            # Asegurar tzinfo
+        else:
+            ultima_fecha = self.fecha_registro
             if ultima_fecha.tzinfo is None:
                 ultima_fecha = ultima_fecha.replace(tzinfo=timezone.utc)
 
-            proximo_km = ultimo_km + INTERVALO_KM_DEFAULT
-
-            # Sumar meses correctamente usando la misma lógica que Mantenimiento usa
+            proximo_km = 0 + INTERVALO_KM_DEFAULT
             proxima_fecha = Mantenimiento._sumar_meses(
                 self,
                 fecha=ultima_fecha,
                 meses=INTERVALO_MESES_DEFAULT
             )
 
-            # Calcular alertas con el mismo criterio
             alerta_km, alerta_fecha = Mantenimiento._calcular_alertas(
                 self,
                 kilometraje_actual=self.kilometraje,
@@ -99,8 +92,12 @@ class Vehiculo(Base):
                 "alerta_km": alerta_km,
                 "alerta_fecha": alerta_fecha
             }
+    
 
-
+    @property
+    def necesita_mantenimiento(self) -> bool:
+        datos = self.consultar_proximo_mantenimiento()
+        return datos["alerta_km"] or datos["alerta_fecha"]
 
     #def actualizar_kilometraje(self, km_realizados: int):
     #    self.kilometraje = self.kilometraje + km_realizados

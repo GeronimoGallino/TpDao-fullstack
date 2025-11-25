@@ -1,7 +1,7 @@
 from pydantic import BaseModel, field_validator, model_validator
 from datetime import datetime, timezone
 
-TIPOS_VALIDOS = {"auto", "camioneta", "moto", "suv", "van"}
+TIPOS_VALIDOS = {"auto", "suv", "van"}
 
 
 class VehiculoBase(BaseModel):
@@ -14,6 +14,7 @@ class VehiculoBase(BaseModel):
     disponible: bool | None = True
     costo_diario: int
     estado: str | None = "activo"
+    necesita_mantenimiento: bool 
 
     # --- VALIDACIONES ---
     """"

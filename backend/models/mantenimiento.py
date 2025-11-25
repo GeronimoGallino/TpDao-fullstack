@@ -42,7 +42,8 @@ class Mantenimiento(Base):
                 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
             ][mes - 1],
         )
-        return fecha.replace(year=año, month=mes, day=dia, tzinfo=fecha.tzinfo)
+        return fecha.replace(year=año, month=mes, day=dia, tzinfo=fecha.tzinfo or timezone.utc)
+
     
     def _calcular_alertas(
         self,
@@ -55,8 +56,19 @@ class Mantenimiento(Base):
 
         alerta_km = kilometraje_actual >= proximo_km - 1000
 
+        # Normalizar ambas fechas a UTC
+        if fecha_actual.tzinfo is None:
+            fecha_actual = fecha_actual.replace(tzinfo=timezone.utc)
+        else:
+            fecha_actual = fecha_actual.astimezone(timezone.utc)
+
+        if proxima_fecha.tzinfo is None:
+            proxima_fecha = proxima_fecha.replace(tzinfo=timezone.utc)
+        else:
+            proxima_fecha = proxima_fecha.astimezone(timezone.utc)
+
         fecha_alerta = proxima_fecha - timedelta(days=15)
-        alerta_fecha = fecha_actual.replace(tzinfo=None) >= fecha_alerta
+        alerta_fecha = fecha_actual >= fecha_alerta
 
         return alerta_km, alerta_fecha
     
@@ -71,7 +83,11 @@ class Mantenimiento(Base):
 
         # Cálculo del próximo mantenimiento
         proximo_km = self.km_actual + self.km_prox_mant
-        proxima_fecha = self._sumar_meses(self.fecha, self.meses_prox_mant)
+        fecha_base = self.fecha
+        if fecha_base.tzinfo is None:
+            fecha_base = fecha_base.replace(tzinfo=timezone.utc)
+
+        proxima_fecha = self._sumar_meses(fecha_base, self.meses_prox_mant)
 
         # Cálculo de alertas
         alerta_km, alerta_fecha = self._calcular_alertas(

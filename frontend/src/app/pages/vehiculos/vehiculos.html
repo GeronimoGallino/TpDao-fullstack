@@ -19,6 +19,7 @@
         <th>Disponible</th>
         <th>Costo diario</th>
         <th>Estado</th>
+        <th>Mantenimiento</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -38,6 +39,11 @@
         </td>
         <td>${{ v.costo_diario }}</td>
         <td>{{ v.estado }}</td>
+        <!-- <td>
+          <span class="badge" [class.alerta]="v.necesita_mantenimiento" [class.ok]="!v.necesita_mantenimiento">
+          {{ v.necesita_mantenimiento ? '⚠️ Requiere' : '✅ Al día' }}
+          </span>
+        </td> -->
         <td>
           <button (click)="editVehiculo(v)">Editar</button>
           <button (click)="confirmDelete(v)">Eliminar</button>

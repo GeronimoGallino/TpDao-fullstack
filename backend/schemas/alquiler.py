@@ -34,6 +34,11 @@ class AlquilerCreate(BaseModel):
     id_cliente: int
     id_vehiculo: int
     id_empleado: int
+    fecha_inicio: datetime | None = None
+    kilometraje_inicial: int | None = None
+    kilometraje_final: int | None = None
+    costo_total: int | None = None
+    estado: str | None = "Activo"
     
 
 # ------------------------------

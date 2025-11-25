@@ -76,7 +76,8 @@ export class VehiculosComponent implements OnInit {
       kilometraje: 0,
       disponible: true,
       costo_diario: 0,
-      estado: ''
+      estado: 'activo',
+      // necesita_mantenimiento: false
     };
     this.isEditing = false;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);

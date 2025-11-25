@@ -80,6 +80,18 @@
 .badge.disponible { background: #d1fae5; color: #065f46; }
 .badge.no-disponible { background: #fee2e2; color: #991b1b; }
 
+.badge.alerta {
+  background-color: #ffcccc;
+  color: #a00;
+  font-weight: bold;
+}
+
+.badge.ok {
+  background-color: #ccffcc;
+  color: #060;
+  font-weight: bold;
+}
+
 .vehiculos-table td:last-child { white-space: nowrap; width: 140px; }
 
 .vehiculos-table button {
