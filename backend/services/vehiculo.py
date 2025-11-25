@@ -27,7 +27,7 @@ def listar_vehiculos(db: Session):
 # Listar vehículos que no estén eliminados (pueden estar no disponibles)
 # ---------------------------------------------------------
 def listar_todos_vehiculos(db: Session):
-    return db.query(Vehiculo).filter(Vehiculo.estado == "activo").all()
+    return db.query(Vehiculo).filter(Vehiculo.estado == "Activo").all()
 
 
 # ---------------------------------------------------------

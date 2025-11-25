@@ -48,7 +48,7 @@
     <form #clienteForm="ngForm" (ngSubmit)="saveCliente()">
       <div>
         <label>Nombre</label>
-        <input name="nombre" required [(ngModel)]="selectedCliente.nombre" />
+        <input name="nombre" type="text" required [(ngModel)]="selectedCliente.nombre" />
       </div>
       <div>
         <label>DNI</label>

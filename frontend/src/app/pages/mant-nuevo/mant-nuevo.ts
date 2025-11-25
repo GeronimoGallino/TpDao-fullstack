@@ -31,7 +31,7 @@ export class MantenimientosComponent {
     km_actual: 0,
     tipo: 'preventivo',
     costo: 0,
-    observaciones: '', 
+    observaciones: '',
     id_mantenimiento: 0,
     vehiculo: undefined,
     empleado: undefined
@@ -44,6 +44,18 @@ export class MantenimientosComponent {
   loadVehiculos(): void {
     this.vehiculosService.getAllActive().subscribe({ next: list => this.vehiculos = list || [], error: err => console.error(err) });
   }
+
+  onVehiculoChange(id_vehiculo: Number) {
+    const id = Number(id_vehiculo);
+    const vehiculoSeleccionado = this.vehiculos.find(v => v.id === id);
+    console.log(vehiculoSeleccionado);
+    if (vehiculoSeleccionado) {
+      this.mantenimiento.km_actual = vehiculoSeleccionado.kilometraje ?? 0;
+    } else {
+      this.mantenimiento.km_actual = 0;
+    }
+  }
+
 
   crearMantenimiento(): void {
     this.loading = true;
@@ -66,7 +78,7 @@ export class MantenimientosComponent {
         };
 
         alert('Mantenimiento creado con éxito!');
-        
+
         this.router.navigate(['/home']);
         this.loading = false;
       },

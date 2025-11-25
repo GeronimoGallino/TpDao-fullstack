@@ -25,6 +25,16 @@ export class AuthService {
   private currentUser: User | null = null;
   private token: string | null = null;
 
+  constructor() {
+    const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
+
+    if (savedUser && savedToken) {
+      this.currentUser = JSON.parse(savedUser);
+      this.token = savedToken;
+    }
+  }
+
   login(credentials: { email: string; password: string }): Observable<LoginResponse> {
     const user = this.USERS.find(
       u => u.email === credentials.email && u.password === credentials.password
