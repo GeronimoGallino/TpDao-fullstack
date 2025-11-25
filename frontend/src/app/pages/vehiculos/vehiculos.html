@@ -56,9 +56,16 @@
     <p>No hay vehículos registrados.</p>
   </ng-template>
 
+  <!-- FORMULARIO -->
   <div class="vehiculo-form" *ngIf="selectedVehiculo">
     <h3>{{ isEditing ? 'Editar vehículo' : 'Nuevo vehículo' }}</h3>
     <form #vehiculoForm="ngForm" (ngSubmit)="saveVehiculo()">
+
+      <!-- MENSAJE DE ERROR -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
       <div>
         <label>Marca</label>
         <input name="marca" required [(ngModel)]="selectedVehiculo.marca" />
@@ -105,6 +112,7 @@
     </form>
   </div>
 
+  <!-- CONFIRMAR ELIMINACIÓN -->
   <div class="confirm-delete" *ngIf="toDeleteVehiculo">
     <p>¿Eliminar <strong>{{ toDeleteVehiculo.marca }} {{ toDeleteVehiculo.modelo }}</strong> (Patente: {{
       toDeleteVehiculo.patente }})?</p>

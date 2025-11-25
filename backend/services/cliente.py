@@ -8,11 +8,18 @@ from backend.schemas.cliente import ClienteCreate
 # Crear cliente
 # ---------------------------------------------------------
 def crear_cliente(db: Session, datos: ClienteCreate):
+    # 1️⃣ Validar que no exista otro cliente con el mismo DNI
+    existing = db.query(Cliente).filter(Cliente.dni == datos.dni).first()
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Ya existe un cliente con DNI {datos.dni}")
+
+    # 2️⃣ Crear cliente
     nuevo_cliente = Cliente(**datos.model_dump())
     db.add(nuevo_cliente)
     db.commit()
     db.refresh(nuevo_cliente)
     return nuevo_cliente
+
 
 
 # ---------------------------------------------------------
@@ -40,16 +47,29 @@ def obtener_cliente(db: Session, cliente_id: int):
 # ---------------------------------------------------------
 # Actualizar cliente
 # ---------------------------------------------------------
+# ---------------------------------------------------------
+# Actualizar cliente con validación de DNI único
+# ---------------------------------------------------------
 def actualizar_cliente(db: Session, cliente_id: int, datos: ClienteCreate):
     cliente = obtener_cliente(db, cliente_id)
 
+    # Validar que el nuevo DNI no exista en otro cliente
+    if datos.dni:
+        dni_existente = (
+            db.query(Cliente)
+            .filter(Cliente.dni == datos.dni, Cliente.id_cliente != cliente_id)
+            .first()
+        )
+        if dni_existente:
+            raise HTTPException(status_code=400, detail=f"Ya existe otro cliente con DNI {datos.dni}")
+
+    # Actualizar los campos
     for key, value in datos.model_dump().items():
         setattr(cliente, key, value)
 
     db.commit()
     db.refresh(cliente)
     return cliente
-
 
 # ---------------------------------------------------------
 # Borrado lógico (cliente.estado = False)

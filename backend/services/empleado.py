@@ -5,14 +5,21 @@ from backend.schemas.empleado import EmpleadoCreate
 
 
 # ---------------------------------------------------------
-# Crear empleado
+# Crear empleado con validación de DNI único
 # ---------------------------------------------------------
 def crear_empleado(db: Session, datos: EmpleadoCreate):
+    # Verificar que no exista un empleado con el mismo DNI
+    if datos.dni:
+        dni_existente = db.query(Empleado).filter(Empleado.dni == datos.dni).first()
+        if dni_existente:
+            raise HTTPException(status_code=400, detail=f"Ya existe un empleado con DNI {datos.dni}")
+
     nuevo_empleado = Empleado(**datos.model_dump())
     db.add(nuevo_empleado)
     db.commit()
     db.refresh(nuevo_empleado)
     return nuevo_empleado
+
 
 
 # ---------------------------------------------------------
@@ -43,6 +50,17 @@ def actualizar_empleado(db: Session, empleado_id: int, datos: EmpleadoCreate):
     if empleado.estado is False:
         raise HTTPException(status_code=404, detail="Empleado eliminado")
 
+    # Validar DNI único
+    if datos.dni:
+        dni_existente = (
+            db.query(Empleado)
+            .filter(Empleado.dni == datos.dni, Empleado.id != empleado_id)
+            .first()
+        )
+        if dni_existente:
+            raise HTTPException(status_code=400, detail=f"Ya existe otro empleado con DNI {datos.dni}")
+
+    # Actualizar campos
     for key, value in datos.model_dump().items():
         setattr(empleado, key, value)
 

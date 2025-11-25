@@ -43,40 +43,85 @@
   </ng-template>
 
   <!-- Formulario crear / editar -->
-  <div class="cliente-form" *ngIf="selectedCliente">
-    <h3>{{ isEditing ? 'Editar cliente' : 'Nuevo cliente' }}</h3>
-    <form #clienteForm="ngForm" (ngSubmit)="saveCliente()">
-      <div>
-        <label>Nombre</label>
-        <input name="nombre" type="text" required [(ngModel)]="selectedCliente.nombre" />
-      </div>
-      <div>
-        <label>DNI</label>
-        <input name="dni" required [(ngModel)]="selectedCliente.dni" />
-      </div>
-      <div>
-        <label>Teléfono</label>
-        <input name="telefono" [(ngModel)]="selectedCliente.telefono" />
-      </div>
-      <div>
-        <label>Email</label>
-        <input type="email" name="email" [(ngModel)]="selectedCliente.email" />
-      </div>
-      <div>
-        <label>Dirección</label>
-        <input name="direccion" [(ngModel)]="selectedCliente.direccion" />
-      </div>
-      <div>
-        <label>Fecha registro</label>
-        <input type="date" name="fecha_registro" [(ngModel)]="selectedCliente.fecha_registro" />
-      </div>
+  <!-- Formulario crear / editar -->
+<div class="cliente-form" *ngIf="selectedCliente">
+  <h3>{{ isEditing ? 'Editar cliente' : 'Nuevo cliente' }}</h3>
 
-      <div class="form-actions">
-        <button type="submit" [disabled]="clienteForm.invalid">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
-        <button type="button" (click)="cancel()">Cancelar</button>
-      </div>
-    </form>
+  <!-- Mensaje de error del backend -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
+
+  <form #clienteForm="ngForm" (ngSubmit)="saveCliente()">
+
+    <!-- Nombre -->
+    <div>
+      <label>Nombre</label>
+      <input name="nombre" type="text" required [(ngModel)]="selectedCliente.nombre" #nombreModel="ngModel" />
+      <div *ngIf="nombreModel.invalid && nombreModel.touched" class="error">
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <!-- DNI -->
+    <div>
+      <label>DNI</label>
+      <input 
+        name="dni" 
+        required 
+        [(ngModel)]="selectedCliente.dni" 
+        #dniModel="ngModel"
+        (keypress)="allowOnlyNumbers($event)"
+      />
+      <div *ngIf="dniModel.invalid && dniModel.touched" class="error">
+        El DNI es obligatorio y debe contener solo números.
+      </div>
+    </div>
+
+    <!-- Teléfono -->
+    <div>
+      <label>Teléfono</label>
+      <input 
+        name="telefono" 
+        [(ngModel)]="selectedCliente.telefono" 
+        #telefonoModel="ngModel"
+        (keypress)="allowOnlyNumbers($event)"
+      />
+      <div *ngIf="telefonoModel.invalid && telefonoModel.touched" class="error">
+        El teléfono debe contener solo números.
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label>Email</label>
+      <input type="email" name="email" [(ngModel)]="selectedCliente.email" #emailModel="ngModel" />
+      <div *ngIf="emailModel.invalid && emailModel.touched" class="error">
+        El email debe ser válido.
+      </div>
+    </div>
+
+    <!-- Dirección -->
+    <div>
+      <label>Dirección</label>
+      <input name="direccion" [(ngModel)]="selectedCliente.direccion" />
+    </div>
+
+    <!-- Fecha registro -->
+    <div>
+      <label>Fecha registro</label>
+      <input type="date" name="fecha_registro" [(ngModel)]="selectedCliente.fecha_registro" />
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="clienteForm.invalid">{{ isEditing ? 'Actualizar' : 'Crear' }}</button>
+      <button type="button" (click)="cancel()">Cancelar</button>
+    </div>
+
+  </form>
+</div>
+
 
   <!-- Confirmación de borrado -->
   <div class="confirm-delete" *ngIf="toDeleteCliente">
