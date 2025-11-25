@@ -1,0 +1,71 @@
+<div class="usuarios-crud container">
+  <h2>Gestión de Usuarios</h2>
+
+  <div class="actions">
+    <button (click)="newUsuario()">Nuevo Usuario</button>
+  </div>
+
+  <table class="usuarios-table" *ngIf="usuarios && usuarios.length; else emptyList">
+    <thead>
+      <tr>
+        <th>Empleado</th>
+        <th>Correo</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ getEmpleado(u.id)?.nombre }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.role }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #emptyList>
+    <p>No hay usuarios cargados.</p>
+  </ng-template>
+
+  <!-- FORMULARIO -->
+  <div class="usuario-form" *ngIf="selectedUsuario">
+    <h3>{{ isEditing ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+
+    <form #usuarioForm="ngForm" (ngSubmit)="saveUsuario()">
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <div>
+        <label>Empleado:</label>
+        <select name="empleado" required [(ngModel)]="selectedUsuario.id">
+          <option *ngFor="let e of empleados" [value]="e.id">{{ e.nombre }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Correo</label>
+        <input name="correo" required [(ngModel)]="selectedUsuario.email" />
+      </div>
+
+      <div>
+        <label>Password</label>
+        <input name="password" required [(ngModel)]="selectedUsuario.password" />
+      </div>
+
+      <div>
+        <label>Rol</label>
+        <select name="rol" required [(ngModel)]="selectedUsuario.role">
+          <option value="user">Usuario</option>
+          <option value="admin">Administrador</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="usuarioForm.invalid">Crear</button>
+        <button type="button" (click)="cancel()">Cancelar</button>
+      </div>
+
+    </form>
+  </div>
+</div>

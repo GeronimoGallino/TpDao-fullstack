@@ -15,6 +15,7 @@ import { MantenimientosComponent } from './pages/mant-nuevo/mant-nuevo';
 import { MantenimientosListComponent } from './pages/mant-historial/mant-historial';
 import { MantenimientosPendComponent } from './pages/mant-pendiente/mant-pendiente';
 import { MultasComponent } from './pages/multas/multas';
+import { SeguridadComponent } from './pages/seguridad/seguridad';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -34,6 +35,8 @@ export const routes: Routes = [
     { path: 'reportes/vehiculos', component: RepTopAlq, canActivate: [AuthGuard], data: { role: 'admin' } },
     { path: 'reportes/periodo', component: RepAlqPer, canActivate: [AuthGuard], data: { role: 'admin' } },
     { path: 'reportes/facturacion', component: RepFacMenComponent, canActivate: [AuthGuard], data: { role: 'admin' } },
+
+    { path: 'seguridad', component: SeguridadComponent, canActivate: [AuthGuard], data: { role: 'admin' }},
 
     { path: 'login', component: Login },
     { path: '**', redirectTo: 'login', pathMatch: 'full' }
