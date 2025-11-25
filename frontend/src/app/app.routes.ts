@@ -14,6 +14,7 @@ import { AuthGuard } from './core/services/authguard';
 import { MantenimientosComponent } from './pages/mant-nuevo/mant-nuevo';
 import { MantenimientosListComponent } from './pages/mant-historial/mant-historial';
 import { MantenimientosPendComponent } from './pages/mant-pendiente/mant-pendiente';
+import { MultasComponent } from './pages/multas/multas';
 
 export const routes: Routes = [
     {
@@ -21,13 +22,11 @@ export const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
     },
-
     {
         path: 'home',
         component: Home,
         canActivate: [AuthGuard]
     },
-
     {
         path: 'clientes',
         component: ClientesComponent,
@@ -66,6 +65,11 @@ export const routes: Routes = [
     {
         path: 'mantenimientos/pendientes',
         component: MantenimientosPendComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'multas',
+        component: MultasComponent,
         canActivate: [AuthGuard]
     },
     {

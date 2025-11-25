@@ -12,6 +12,7 @@ router = APIRouter(prefix="/multas", tags=["Multas"])
 # ============================
 @router.post("/", response_model=schemas.Multa)
 def crear_multa(multa: schemas.MultaCreate, db: Session = Depends(database.get_db)):
+    print(multa, 'la multa')
     return multa_service.crear_multa(db, multa)
 
 

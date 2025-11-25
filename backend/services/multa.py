@@ -11,7 +11,7 @@ from backend.schemas.multa import MultaCreate, MultaUpdate
 def crear_multa(db: Session, datos: MultaCreate):
     # Verificar que el alquiler exista y esté activo
     alquiler = db.query(Alquiler).filter(Alquiler.id == datos.id_alquiler).first()
-
+    print(alquiler.id, alquiler.estado, 'el alquiler')
     if not alquiler:
         raise HTTPException(status_code=404, detail="Alquiler no encontrado")
 
