@@ -20,10 +20,10 @@ export class VehiculosComponent implements OnInit {
   toDeleteVehiculo: Vehiculo | null = null;
   isEditing = false;
   loading = false;
+  errorMessage: string | null = null; // <-- para mostrar errores de patente duplicada
 
   constructor(private vehiculosService: VehiculosService,
-    private cdr: ChangeDetectorRef
-  ) {}
+              private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.applyFilter();
@@ -79,29 +79,42 @@ export class VehiculosComponent implements OnInit {
       estado: ''
     };
     this.isEditing = false;
+    this.errorMessage = null;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
   }
 
   editVehiculo(v: Vehiculo): void {
     this.selectedVehiculo = { ...v };
     this.isEditing = true;
+    this.errorMessage = null;
     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
   }
 
   saveVehiculo(): void {
-    if (!this.selectedVehiculo) return;
+  if (!this.selectedVehiculo) return;
 
-    if (this.isEditing) {
-      this.vehiculosService.update(this.selectedVehiculo).subscribe({
-        next: () => { this.loadVehiculos(); this.cancel(); },
-        error: err => console.error('Error actualizando vehículo', err)
-      });
-    } else {
-      this.vehiculosService.create(this.selectedVehiculo).subscribe({
-        next: () => { this.loadVehiculos(); this.cancel(); },
-        error: err => console.error('Error creando vehículo', err)
-      });
+  this.errorMessage = null; // limpiar error previo
+
+  const obs = this.isEditing 
+    ? this.vehiculosService.update(this.selectedVehiculo)
+    : this.vehiculosService.create(this.selectedVehiculo);
+
+  obs.subscribe({
+    next: () => { this.loadVehiculos(); this.cancel(); },
+    error: err => {
+      console.error('Error creando/actualizando vehículo', err);
+      this.errorMessage = this.extractErrorMessage(err);
+      this.cdr.markForCheck(); // <- IMPORTANTE
     }
+  });
+}
+
+  // Extrae el mensaje de error enviado desde el backend
+  private extractErrorMessage(err: any): string {
+    if (err.error && typeof err.error.detail === 'string') {
+      return err.error.detail;
+    }
+    return 'Ocurrió un error inesperado';
   }
 
   confirmDelete(v: Vehiculo): void {
@@ -121,5 +134,6 @@ export class VehiculosComponent implements OnInit {
     this.selectedVehiculo = null;
     this.toDeleteVehiculo = null;
     this.isEditing = false;
+    this.errorMessage = null;
   }
 }
